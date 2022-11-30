@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=datasche.json
+
+
+---
+test_1:
+  hostname: Dual VU19P Prodigy Logic System
+  power_1_8V: OFF
+  power_3_3V: OFF
+  power_5_0V: ON
+  S2CCLK_1: 20
+  S2CCLK_2: 24
+  S2CCLK_3: 16
+  S2CCLK_4: 200
+  S2CCLK_5: 200
+  S2CCLK_6: 150
+  S2CCLK_7: 100
+  S2CCLK_8: 100
+  fpga2_bitfile: null
+  fpga1_bitfile: C:\project\Jh8100\0047 JH8100_P1V0P8P3SEP9_SCP_EXPORT\bit\JH8100_P1V0P8P3SEP9_SCP_rtlcedd25e_fpga2c3fa3f_P1_UV19P_2209100705.bit
+  project : <jh7100/jh7110/jh8100>
+  config_id :
+  cpu : <dubhe/u74/e24>
+
+
+test_2:
+  hostname: Dual VU19P Prodigy Logic System
+  power_1_8V: OFF
+  power_3_3V: OFF
+  power_5_0V: ON
+  S2CCLK_1: 20
+  S2CCLK_2: 20
+  S2CCLK_3: 16
+  S2CCLK_4: 200
+  S2CCLK_5: 200
+  S2CCLK_6: 150
+  S2CCLK_7: 100
+  S2CCLK_8: 100
+  fpga2_bitfile: C:\project\Jh8100\0047 JH8100_P1V0P8P3SEP9_SCP_EXPORT\bit\JH8100_P1V0P8P3SEP9_SCP_rtlcedd25e_fpga2c3fa3f_P1_UV19P_2209100705.bit
+  fpga1_bitfile: null
+  project : <jh7100/jh7110/jh8100>
+  config_id :
+  cpu : <dubhe/u74/e24>

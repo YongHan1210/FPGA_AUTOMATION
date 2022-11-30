@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<BoardInfo>
+	<board htype="XCVU19P_1FSVA3824E" firmware="VU19PD.002.001.e6042d7" connect="3">
+		<fpgastatus value="0011"/>
+		<nic>
+			<ip value="192.168.152.253"/>
+			<mac value="0C-5C-B5-60-13-14"/>
+		</nic>
+		<clock src="0">
+			<S2CCLK1 fre="20.000 MHz"/>
+			<S2CCLK2 fre="24.000 MHz"/>
+			<S2CCLK3 fre="16.000 MHz"/>
+			<S2CCLK4 fre="200.002 MHz"/>
+			<S2CCLK5 fre="200.002 MHz"/>
+			<S2CCLK6 fre="150.002 MHz"/>
+			<S2CCLK7 fre="100.000 MHz"/>
+			<S2CCLK8 fre="100.001 MHz"/>
+		</clock>
+		<daughtercards>
+		<F1>
+			<card connector="J1" conNum="1" voltage="1.8V" partNo="P-PM-IMD" partNm="file not found"/>
+			<card connector="J2" conNum="1" voltage="1.8V" partNo="P-PM-IMD" partNm="file not found"/>
+			<card connector="J3" conNum="1" voltage="1.8V" partNo="P-PM-IMD" partNm="file not found"/>
+		</F1>
+		<F2>
+			<card connector="J1" conNum="1" voltage="1.8V" partNo="P-PM-ETM4" partNm="file not found"/>
+			<card connector="J2" conNum="1" voltage="1.8V" partNo="P-PM-PPM" partNm="file not found"/>
+			<card connector="J6" conNum="1" voltage="1.8V" partNo="P-PM-IMD" partNm="file not found"/>
+			<card connector="J7" conNum="1" voltage="1.8V" partNo="P-PM-IMD" partNm="file not found"/>
+			<card connector="J8" conNum="1" voltage="1.8V" partNo="P-PM-IMD" partNm="file not found"/>
+		</F2>
+		</daughtercards>
+	</board>
+</BoardInfo>
