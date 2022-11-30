@@ -574,10 +574,8 @@ class runcall:
 if __name__ == '__main__':
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("modulename", help="check for the module name in yaml file",
-                        type=str)
+    parser.add_argument("modulename", help="check for the module name in yaml file",type=str)
     args = parser.parse_args()
-
     modulename=args.modulename
 
     yamld=yamld(modulename)
