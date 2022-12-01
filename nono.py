@@ -9,7 +9,7 @@ class yamld:
         self.modulename=modulename
         
         self.hostname=self.getdata()[self.modulename]["hostname"]
-        self.powermodule_ip=self.getdata()[self.modulename]["powermodule_ip"]
+        self.powermodule_ip=self.def_powermodule_ip()
         self.power_1_8V=self.getdata()[self.modulename]["power_1_8V"]
         self.power_3_3V=self.getdata()[self.modulename]["power_3_3V"]
         self.power_5_0V=self.getdata()[self.modulename]["power_5_0V"]
@@ -28,7 +28,9 @@ class yamld:
         with open("hello.yaml","r") as f:
             data=yaml.safe_load(f)
             return data
-
+    def def_powermodule_ip(self):
+        fpga=s2cyh.S2C_FPGAS[self.hostname]
+        return(fpga.get_pwrctrl_ip())
     
     def getmodulename(self): return (self.modulename)
     def gethostname(self): return (self.hostname)
@@ -86,19 +88,18 @@ class mkfolfildir:
         return path
 
 class automationmain:
-    def __init__(self,modulename,daughthercard_ip,boardtype,listvar,fpga1outpath=None,fpga2outpath=None):
+    def __init__(self,modulename,boardtype,powermodule_ip,listvar,fpga1outpath=None,fpga2outpath=None):
         self.modulename=modulename
-        self.daughthercard_ip=daughthercard_ip
         self.boardtype=boardtype
+        self.powermodule_ip=powermodule_ip
         self.listvar=listvar
-        self.powermodule_ip=self.listvar[0]
-        self.J11power=self.listvar[1]
-        self.J9power=self.listvar[2]
-        self.J8power=self.listvar[3]
-        self.fpga1bitfile=self.listvar[12]
-        self.fpga2bitfile=self.listvar[13]
+        self.J11power=self.listvar[0]
+        self.J9power=self.listvar[1]
+        self.J8power=self.listvar[2]
+        self.fpga1bitfile=self.listvar[11]
+        self.fpga2bitfile=self.listvar[12]
         
-        self.listclk=[self.listvar[4],self.listvar[5],self.listvar[6],self.listvar[7],self.listvar[8],self.listvar[9],self.listvar[10],self.listvar[11]]
+        self.listclk=[self.listvar[3],self.listvar[4],self.listvar[5],self.listvar[6],self.listvar[7],self.listvar[8],self.listvar[9],self.listvar[10]]
         
         self.path1=fpga1outpath
         self.path2=fpga2outpath
@@ -578,18 +579,19 @@ if __name__ == '__main__':
 
     yamld=yamld(modulename)
     hostname=yamld.gethostname()
-    listvar=[yamld.getpowermodule_ip(),yamld.getpower_1_8V(),yamld.getpower_3_3V(),yamld.getpower_5_0V(),yamld.getS2CCLK_1(),yamld.getS2CCLK_2(),yamld.getS2CCLK_3(),yamld.getS2CCLK_4(),yamld.getS2CCLK_5(),yamld.getS2CCLK_6(),yamld.getS2CCLK_7(),yamld.getS2CCLK_8(),yamld.getfpga1_bitfile(),yamld.getfpga2_bitfile()]
+    powermoduleip=yamld.getpowermodule_ip()
+    listvar=[yamld.getpower_1_8V(),yamld.getpower_3_3V(),yamld.getpower_5_0V(),yamld.getS2CCLK_1(),yamld.getS2CCLK_2(),yamld.getS2CCLK_3(),yamld.getS2CCLK_4(),yamld.getS2CCLK_5(),yamld.getS2CCLK_6(),yamld.getS2CCLK_7(),yamld.getS2CCLK_8(),yamld.getfpga1_bitfile(),yamld.getfpga2_bitfile()]
     
     mk=mkfolfildir(yamld.getfpga1_bitfile(),yamld.getfpga2_bitfile())
     fpga1outpath,fpga2outpath=mk.mainff()
     
     program_retry=1
-    auto=automationmain(modulename,hostname,listvar,fpga1outpath,fpga2outpath)
+    auto=automationmain(modulename,hostname,powermoduleip,listvar,fpga1outpath,fpga2outpath)
     #auto=automationmain(powermoduleip,hostname,yamld.getpower_1_8V(),yamld.getpower_3_3V(),yamld.getpower_5_0V(),yamld.getS2CCLK_1(),yamld.getS2CCLK_2(),yamld.getS2CCLK_3(),yamld.getS2CCLK_4(),yamld.getS2CCLK_5(),yamld.getS2CCLK_6(),yamld.getS2CCLK_7(),yamld.getS2CCLK_8(),yamld.getfpga1_bitfile(),yamld.getfpga2_bitfile(),fpga1outpath,fpga2outpath)
     while(program_retry<4):
         return_code=auto.loopfunction(program_retry)
         if return_code==0:
             break
         else:
-            autofunc_offpow.offpower(yamld.getpowermodule_ip(),fpga1outpath,fpga2outpath)
+            autofunc_offpow.offpower(powermoduleip,fpga1outpath,fpga2outpath)
             program_retry+=1
