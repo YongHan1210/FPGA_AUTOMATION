@@ -65,7 +65,7 @@ S2C_FPGAS = {
 	'VU19P-120-27' : S2cFpga('VU19P-120-27' , '', S2cFpga.LS_VU19P ),
 	'2VU19P-120-29': S2cFpga('2VU19P-120-29', '', S2cFpga.LS_2VU19P),
 	'2VU19P-120-30': S2cFpga('2VU19P-120-30', '', S2cFpga.LS_2VU19P),
-	'Dual VU19P Prodigy Logic System': S2cFpga('Dual VU19P Prodigy Logic System', '192.168.152.254', S2cFpga.LS_2VU19P),
+	'Dual VU19P Prodigy Logic System': S2cFpga('Dual VU19P Prodigy Logic System', '192.168.152.253', S2cFpga.LS_2VU19P),
 }
 
 class S2cPlayerPro:
