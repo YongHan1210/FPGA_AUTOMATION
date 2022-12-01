@@ -4,6 +4,7 @@
 ---
 test_1:
   hostname: Dual VU19P Prodigy Logic System
+  powermoduleip: 192.168.152.254
   power_1_8V: OFF
   power_3_3V: OFF
   power_5_0V: ON
@@ -24,6 +25,7 @@ test_1:
 
 test_2:
   hostname: Dual VU19P Prodigy Logic System
+  powermoduleip: 192.168.152.254
   power_1_8V: OFF
   power_3_3V: OFF
   power_5_0V: ON

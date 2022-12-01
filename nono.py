@@ -9,7 +9,7 @@ class yamld:
         self.modulename=modulename
         
         self.hostname=self.getdata()[self.modulename]["hostname"]
-        self.hostip=self.defip()
+        self.powermodule_ip=self.getdata()[self.modulename]["powermodule_ip"]
         self.power_1_8V=self.getdata()[self.modulename]["power_1_8V"]
         self.power_3_3V=self.getdata()[self.modulename]["power_3_3V"]
         self.power_5_0V=self.getdata()[self.modulename]["power_5_0V"]
@@ -28,13 +28,11 @@ class yamld:
         with open("hello.yaml","r") as f:
             data=yaml.safe_load(f)
             return data
-    def defip(self):
-        fpga=s2cyh.S2C_FPGAS[self.hostname]
-        return(fpga.get_hostip())
+
     
     def getmodulename(self): return (self.modulename)
     def gethostname(self): return (self.hostname)
-    def gethostip(self): return (self.hostip)
+    def getpowermodule_ip(self): return (self.powermodule_ip)
     def getpower_1_8V(self): return (self.power_1_8V)
     def getpower_3_3V(self): return (self.power_3_3V)
     def getpower_5_0V(self): return (self.power_5_0V)
@@ -88,19 +86,19 @@ class mkfolfildir:
         return path
 
 class automationmain:
-    def __init__(self,modulename,powermoduleip,boardtype,listvar,fpga1outpath=None,fpga2outpath=None):
+    def __init__(self,modulename,daughthercard_ip,boardtype,listvar,fpga1outpath=None,fpga2outpath=None):
         self.modulename=modulename
-        self.powermoduleip=powermoduleip
+        self.daughthercard_ip=daughthercard_ip
         self.boardtype=boardtype
         self.listvar=listvar
+        self.powermodule_ip=self.listvar[0]
+        self.J11power=self.listvar[1]
+        self.J9power=self.listvar[2]
+        self.J8power=self.listvar[3]
+        self.fpga1bitfile=self.listvar[12]
+        self.fpga2bitfile=self.listvar[13]
         
-        self.J11power=self.listvar[0]
-        self.J9power=self.listvar[1]
-        self.J8power=self.listvar[2]
-        self.fpga1bitfile=self.listvar[11]
-        self.fpga2bitfile=self.listvar[12]
-        
-        self.listclk=[self.listvar[3],self.listvar[4],self.listvar[5],self.listvar[6],self.listvar[7],self.listvar[8],self.listvar[9],self.listvar[10]]
+        self.listclk=[self.listvar[4],self.listvar[5],self.listvar[6],self.listvar[7],self.listvar[8],self.listvar[9],self.listvar[10],self.listvar[11]]
         
         self.path1=fpga1outpath
         self.path2=fpga2outpath
@@ -119,7 +117,7 @@ class automationmain:
     def loopfunction(self,program_retry):
         self.writeinterf(program_retry)
         
-        return_code=autofunc_onpow.onpower(self.J11power,self.J9power,self.J8power,self.powermoduleip,self.path1,self.path2)
+        return_code=autofunc_onpow.onpower(self.J11power,self.J9power,self.J8power,self.powermodule_ip,self.path1,self.path2)
         if return_code!=0:
             return return_code  
           
@@ -143,7 +141,7 @@ class automationmain:
 
 
 class autofunc_offpow:
-    def offpower(powermoduleip,path1=None,path2=None):
+    def offpower(powermodule_ip,path1=None,path2=None):
         interface="    POWER OFF FPGA & DCARD"
         print("\t"*4,"*"*60)
         print("\t"*6,interface)
@@ -153,28 +151,28 @@ class autofunc_offpow:
         writetof.wf("OFFPOWER",path2)
 
 
-        cmd=f"S2C_stm32_lwip.exe --ip {powermoduleip} --port 8080 --pwr J11 --setpwr off"
-        print(f"\n[INFO] Turn off PowerModule {powermoduleip}, J11 1_8V ...")
+        cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J11 --setpwr off"
+        print(f"\n[INFO] Turn off PowerModule {powermodule_ip}, J11 1_8V ...")
         return_code=rc.subpcall(cmd,timeout=30)
         if return_code!=0:
             return return_code 
     
 
-        cmd=f"S2C_stm32_lwip.exe --ip {powermoduleip} --port 8080 --pwr J9 --setpwr off"
-        print(f"\n[INFO] Turn off PowerModule {powermoduleip}, J8 3_3V ...")
+        cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J9 --setpwr off"
+        print(f"\n[INFO] Turn off PowerModule {powermodule_ip}, J8 3_3V ...")
         return_code=rc.subpcall(cmd,timeout=30)
         if return_code!=0:
             return return_code 
     
 
-        cmd=f"S2C_stm32_lwip.exe --ip {powermoduleip} --port 8080 --pwr J8 --setpwr off"
-        print(f"\n[INFO] Turn off PowerModule {powermoduleip}, J8 5_0V ...")
+        cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J8 --setpwr off"
+        print(f"\n[INFO] Turn off PowerModule {powermodule_ip}, J8 5_0V ...")
         return_code=rc.subpcall(cmd,timeout=30)
         if return_code!=0:
             return return_code 
 
-        cmd=f"S2C_stm32_lwip.exe --ip {powermoduleip} --port 8080 --pwr J6 --setpwr off"
-        print(f"\n[INFO] Turn off PowerModule {powermoduleip}, S2C_POWER_BASE ...")
+        cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J6 --setpwr off"
+        print(f"\n[INFO] Turn off PowerModule {powermodule_ip}, S2C_POWER_BASE ...")
         return_code=rc.subpcall(cmd,timeout=30)
         if return_code!=0:
             return return_code 
@@ -193,7 +191,7 @@ class countd():
 
 class autofunc_onpow:
     
-    def onpower(powerJ11,powerJ9,powerJ8,powermoduleip,path1=None,path2=None):
+    def onpower(powerJ11,powerJ9,powerJ8,powermodule_ip,path1=None,path2=None):
         interface="    POWER ON FPGA & DCARD"
         print("\t"*4,"*"*60)
         print("\t"*6,interface)
@@ -204,38 +202,38 @@ class autofunc_onpow:
         
         
         
-        cmd=f"S2C_stm32_lwip.exe --ip {powermoduleip} --port 8080 --pwr J6 --setpwr on"
-        print(f"\n[INFO] Turn on PowerModule {powermoduleip}, S2C_POWER_BASE ...")
+        cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J6 --setpwr on"
+        print(f"\n[INFO] Turn on PowerModule {powermodule_ip}, S2C_POWER_BASE ...")
         return_code=rc.subpcall(cmd,timeout=30)
         if return_code!=0:
             return return_code 
         
         if powerJ11:
-            cmd=f"S2C_stm32_lwip.exe --ip {powermoduleip} --port 8080 --pwr J11 --setpwr on"
-            print(f"\n[INFO] Turn on PowerModule {powermoduleip}, J11 1_8V ...")
+            cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J11 --setpwr on"
+            print(f"\n[INFO] Turn on PowerModule {powermodule_ip}, J11 1_8V ...")
         else:
-            cmd=f"S2C_stm32_lwip.exe --ip {powermoduleip} --port 8080 --pwr J11 --setpwr off"
-            print(f"\n[INFO] Turn off PowerModule {powermoduleip}, J11 1_8V ...")
+            cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J11 --setpwr off"
+            print(f"\n[INFO] Turn off PowerModule {powermodule_ip}, J11 1_8V ...")
         return_code=rc.subpcall(cmd,timeout=30)
         if return_code!=0:
             return return_code 
         
         if powerJ9:
-            cmd=f"S2C_stm32_lwip.exe --ip {powermoduleip} --port 8080 --pwr J9 --setpwr on"
-            print(f"\n[INFO] Turn on PowerModule {powermoduleip}, J9 3_3V ...")
+            cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J9 --setpwr on"
+            print(f"\n[INFO] Turn on PowerModule {powermodule_ip}, J9 3_3V ...")
         else:
-            cmd=f"S2C_stm32_lwip.exe --ip {powermoduleip} --port 8080 --pwr J9 --setpwr off"
-            print(f"\n[INFO] Turn off PowerModule {powermoduleip}, J8 3_3V ...")
+            cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J9 --setpwr off"
+            print(f"\n[INFO] Turn off PowerModule {powermodule_ip}, J8 3_3V ...")
         return_code=rc.subpcall(cmd,timeout=30)
         if return_code!=0:
             return return_code 
         
         if powerJ8:
-            cmd=f"S2C_stm32_lwip.exe --ip {powermoduleip} --port 8080 --pwr J8 --setpwr on"
-            print(f"\n[INFO] Turn on PowerModule {powermoduleip}, J8 5_0V ...")
+            cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J8 --setpwr on"
+            print(f"\n[INFO] Turn on PowerModule {powermodule_ip}, J8 5_0V ...")
         else:
-            cmd=f"S2C_stm32_lwip.exe --ip {powermoduleip} --port 8080 --pwr J8 --setpwr off"
-            print(f"\n[INFO] Turn off PowerModule {powermoduleip}, J8 5_0V ...")
+            cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J8 --setpwr off"
+            print(f"\n[INFO] Turn off PowerModule {powermodule_ip}, J8 5_0V ...")
         return_code=rc.subpcall(cmd,timeout=30)
         if return_code!=0:
             return return_code 
@@ -580,19 +578,18 @@ if __name__ == '__main__':
 
     yamld=yamld(modulename)
     hostname=yamld.gethostname()
-    powermoduleip=yamld.gethostip()
-    listvar=[yamld.getpower_1_8V(),yamld.getpower_3_3V(),yamld.getpower_5_0V(),yamld.getS2CCLK_1(),yamld.getS2CCLK_2(),yamld.getS2CCLK_3(),yamld.getS2CCLK_4(),yamld.getS2CCLK_5(),yamld.getS2CCLK_6(),yamld.getS2CCLK_7(),yamld.getS2CCLK_8(),yamld.getfpga1_bitfile(),yamld.getfpga2_bitfile()]
+    listvar=[yamld.getpowermodule_ip(),yamld.getpower_1_8V(),yamld.getpower_3_3V(),yamld.getpower_5_0V(),yamld.getS2CCLK_1(),yamld.getS2CCLK_2(),yamld.getS2CCLK_3(),yamld.getS2CCLK_4(),yamld.getS2CCLK_5(),yamld.getS2CCLK_6(),yamld.getS2CCLK_7(),yamld.getS2CCLK_8(),yamld.getfpga1_bitfile(),yamld.getfpga2_bitfile()]
     
     mk=mkfolfildir(yamld.getfpga1_bitfile(),yamld.getfpga2_bitfile())
     fpga1outpath,fpga2outpath=mk.mainff()
     
     program_retry=1
-    auto=automationmain(modulename,powermoduleip,hostname,listvar,fpga1outpath,fpga2outpath)
+    auto=automationmain(modulename,hostname,listvar,fpga1outpath,fpga2outpath)
     #auto=automationmain(powermoduleip,hostname,yamld.getpower_1_8V(),yamld.getpower_3_3V(),yamld.getpower_5_0V(),yamld.getS2CCLK_1(),yamld.getS2CCLK_2(),yamld.getS2CCLK_3(),yamld.getS2CCLK_4(),yamld.getS2CCLK_5(),yamld.getS2CCLK_6(),yamld.getS2CCLK_7(),yamld.getS2CCLK_8(),yamld.getfpga1_bitfile(),yamld.getfpga2_bitfile(),fpga1outpath,fpga2outpath)
     while(program_retry<4):
         return_code=auto.loopfunction(program_retry)
         if return_code==0:
             break
         else:
-            autofunc_offpow.offpower(powermoduleip,fpga1outpath,fpga2outpath)
+            autofunc_offpow.offpower(yamld.getpowermodule_ip(),fpga1outpath,fpga2outpath)
             program_retry+=1
