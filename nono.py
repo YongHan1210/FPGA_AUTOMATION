@@ -118,7 +118,7 @@ class automationmain:
     def loopfunction(self,program_retry):
         self.writeinterf(program_retry)
         
-        return_code=autofunc_onpow.onpower(self.J11power,self.J9power,self.J8power,self.powermodule_ip,self.path1,self.path2)
+        return_code=autofunc_onpow.fpga_onpower(self.powermodule_ip,self.path1,self.path2)
         if return_code!=0:
             return return_code  
           
@@ -137,6 +137,10 @@ class automationmain:
         return_code=autofunc_clkdet.readcheckclkmain(self.boardtype,self.listclk,self.path1,self.path2)
         if return_code!=0:
             return return_code
+        
+        return_code=autofunc_onpow.daughthercard_onpower(self.J11power,self.J9power,self.J8power,self.powermodule_ip,self.path1,self.path2)
+        if return_code!=0:
+            return return_code  
         
         return return_code
 
@@ -192,8 +196,8 @@ class countd():
 
 class autofunc_onpow:
     
-    def onpower(powerJ11,powerJ9,powerJ8,powermodule_ip,path1=None,path2=None):
-        interface="    POWER ON FPGA & DCARD"
+    def fpga_onpower(powermodule_ip,path1=None,path2=None):
+        interface="    POWER ON FPGA"
         print("\t"*4,"*"*60)
         print("\t"*6,interface)
         print("\t"*4,"*"*60)
@@ -201,13 +205,20 @@ class autofunc_onpow:
         writetof.wf("ONPOWER",path1)
         writetof.wf("ONPOWER",path2)
         
-        
-        
         cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J6 --setpwr on"
         print(f"\n[INFO] Turn on PowerModule {powermodule_ip}, S2C_POWER_BASE ...")
         return_code=rc.subpcall(cmd,timeout=30)
         if return_code!=0:
             return return_code 
+    
+    def daughthercard_onpower(powerJ11,powerJ9,powerJ8,powermodule_ip,path1=None,path2=None):  
+        interface="  POWER ON DAUGHTHER CARD"
+        print("\t"*4,"*"*60)
+        print("\t"*6,interface)
+        print("\t"*4,"*"*60)
+        rc=runcall(path1,path2)
+        writetof.wf("ONPOWER",path1)
+        writetof.wf("ONPOWER",path2)
         
         if powerJ11:
             cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J11 --setpwr on"
