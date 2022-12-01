@@ -65,7 +65,7 @@ S2C_FPGAS = {
 	'VU19P-120-27' : S2cFpga('VU19P-120-27' , '', S2cFpga.LS_VU19P ),
 	'2VU19P-120-29': S2cFpga('2VU19P-120-29', '', S2cFpga.LS_2VU19P),
 	'2VU19P-120-30': S2cFpga('2VU19P-120-30', '', S2cFpga.LS_2VU19P),
-	'Dual VU19P Prodigy Logic System': S2cFpga('Dual VU19P Prodigy Logic System', '192.168.152.254', S2cFpga.LS_2VU19P),
+	'Dual VU19P Prodigy Logic System': S2cFpga('Dual VU19P Prodigy Logic System', '', S2cFpga.LS_2VU19P,connection='USB',ip='192.168.152.253',pwrctrl_ip='192.168.152.254'),
 }
 
 class S2cPlayerPro:
@@ -102,7 +102,7 @@ class S2cPlayerPro:
 			f.write(f'<?xml version="1.0" encoding="UTF-8"?>\n')
 			f.write(f'<MB config="Standalone" connection="ETH" ip="" nm="Runtime" num="1"\n')
 			f.write(f'	port="8080" targetFamily="{fpga.get_targetFamily()}">\n')
-			f.write(f'	<Board boardNo="1" connection="ETH" ip="{fpga.get_hostip()}"\n')
+			f.write(f'	<Board boardNo="1" connection="ETH" ip="{fpga.get_ip()}"\n')
 			f.write(f'		module="{fpga.get_module()}" port="8080" slot="">\n')
 			fpga_cnt = fpga.get_fpga_cnt()
 			if fpga_cnt > 1:

@@ -10,7 +10,6 @@
             "properties": {
             
             "hostname":{"description": "FPGA board name","type":"string"},
-
             "power_1_8V":{"description": "Switch 8V of FPGA [ON / OFF]","$ref": "#/definitions/POWER"},
             "power_3_3V":{"description": "Switch 3V of FPGA [ON / OFF]","$ref": "#/definitions/POWER"},
             "power_5_0V":{"description": "Switch 0V of FPGA [ON / OFF]","$ref": "#/definitions/POWER"},
