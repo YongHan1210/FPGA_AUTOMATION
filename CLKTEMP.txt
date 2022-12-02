@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <BoardInfo>
 	<board htype="XCVU19P_1FSVA3824E" firmware="VU19PD.002.001.e6042d7" connect="3">
-		<fpgastatus value="0011"/>
+		<fpgastatus value="0001"/>
 		<nic>
 			<ip value="192.168.152.253"/>
 			<mac value="0C-5C-B5-60-13-14"/>
@@ -12,7 +12,7 @@
 			<S2CCLK3 fre="16.000 MHz"/>
 			<S2CCLK4 fre="200.002 MHz"/>
 			<S2CCLK5 fre="200.002 MHz"/>
-			<S2CCLK6 fre="150.001 MHz"/>
+			<S2CCLK6 fre="150.002 MHz"/>
 			<S2CCLK7 fre="100.000 MHz"/>
 			<S2CCLK8 fre="100.001 MHz"/>
 		</clock>

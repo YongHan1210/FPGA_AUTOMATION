@@ -1,0 +1,57 @@
+------------------------------
+ TESTING RUN 1
+------------------------------
+------------------------------
+ONPOWER
+------------------------------
+Set J6 is ok.
+Command done.
+------------------------------
+OFFPOWER
+------------------------------
+Set J11 is ok.
+Command done.
+Set J9 is ok.
+Command done.
+Set J8 is ok.
+Command done.
+Set J6 is ok.
+Command done.
+------------------------------
+ TESTING RUN 2
+------------------------------
+------------------------------
+ONPOWER
+------------------------------
+Set J6 is ok.
+Command done.
+------------------------------
+OFFPOWER
+------------------------------
+Set J11 is ok.
+Command done.
+Set J9 is ok.
+Command done.
+Set J8 is ok.
+Command done.
+Set J6 is ok.
+Command done.
+------------------------------
+ TESTING RUN 3
+------------------------------
+------------------------------
+ONPOWER
+------------------------------
+Set J6 is ok.
+Command done.
+------------------------------
+OFFPOWER
+------------------------------
+Set J11 is ok.
+Command done.
+Set J9 is ok.
+Command done.
+Set J8 is ok.
+Command done.
+Set J6 is ok.
+Command done.

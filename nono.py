@@ -210,6 +210,9 @@ class autofunc_onpow:
         return_code=rc.subpcall(cmd,timeout=30)
         if return_code!=0:
             return return_code 
+        print("Warming up FPGA in [20 seconds]...")
+        countd.countdown(20)
+        return return_code
     
     def daughthercard_onpower(powerJ11,powerJ9,powerJ8,powermodule_ip,path1=None,path2=None):  
         interface="  POWER ON DAUGHTHER CARD"
@@ -249,7 +252,7 @@ class autofunc_onpow:
         return_code=rc.subpcall(cmd,timeout=30)
         if return_code!=0:
             return return_code 
-        print("Warming up FPGA in [20 seconds]...")
+        print("Warming up DAUGHTER CARD in [20 seconds]...")
         countd.countdown(20)
         return return_code
 
