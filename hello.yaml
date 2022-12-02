@@ -6,8 +6,8 @@ test_1:
   fpga:
     hostname: Dual VU19P Prodigy Logic System
     power_1_8V: OFF
-    power_3_3V: OFF
-    power_5_0V: ON
+    power_3_3V: ON
+    power_5_0V: OFF
     S2CCLK_1: 20
     S2CCLK_2: 24
     S2CCLK_3: 16
