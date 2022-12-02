@@ -216,7 +216,7 @@ class autofunc_onpow:
     
     def daughthercard_onpower(powerJ11,powerJ9,powerJ8,powermodule_ip,path1=None,path2=None):  
         interface="  POWER ON DAUGHTHER CARD"
-        print("\t"*4,"*"*60)
+        print("\n","\t"*4,"*"*60)
         print("\t"*6,interface)
         print("\t"*4,"*"*60)
         rc=runcall(path1,path2)
