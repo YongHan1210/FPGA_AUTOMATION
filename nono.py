@@ -147,7 +147,7 @@ class automationmain:
 
 class autofunc_offpow:
     def offpower(powermodule_ip,path1=None,path2=None):
-        interface="    POWER OFF FPGA & DCARD"
+        interface="      POWER OFF FPGA & DCARD"
         print("\t"*4,"*"*60)
         print("\t"*6,interface)
         print("\t"*4,"*"*60)

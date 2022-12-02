@@ -1,3 +1,24 @@
+------------------------------
+ TESTING RUN 1
+------------------------------
+------------------------------
+ONPOWER
+------------------------------
+------------------------------
+CLOCKGEN
+------------------------------
+-------------[S2C FW] CLOCK GENERATING-------------
+[info]start config 5338
+[info]finish clock configuration
+-------------[S2C FW] CLOCK GENERATING-------------
+[info]start config 5338
+[info]finish clock configuration
+------------------------------
+HARDWARE
+------------------------------
+------------------------------
+BOARD INFO
+------------------------------
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <BoardInfo>
 	<board htype="XCVU19P_1FSVA3824E" firmware="VU19PD.002.001.e6042d7" connect="3">
@@ -32,3 +53,24 @@
 		</daughtercards>
 	</board>
 </BoardInfo>
+------------------------------
+DOWNLOAD MODULE
+------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<Download project="Runtime">
+	<Module idx="0">
+		<Fpga file="" flag="off" idx="1"/>
+	</Module>
+	<Module boardType="DUAL160" idx="1">
+		<Fpga file="" flag="off" idx="1"/>
+		<Fpga file="C:\project\Jh8100\0047 JH8100_P1V0P8P3SEP9_SCP_EXPORT\bit\JH8100_P1V0P8P3SEP9_SCP_rtlcedd25e_fpga2c3fa3f_P1_UV19P_2209100705.bit" flag="on" idx="2"/>
+	</Module>
+</Download>
+mbus mode
+-------------[S2C FW] DOWNLOAD -------------
+copy right - S2C @Nov  4 2021 10:16:23.
+[INFO] start download f2......
+F2.........10 %
+F2.........20 %
+F2.........30 %
+F2.........40 %
