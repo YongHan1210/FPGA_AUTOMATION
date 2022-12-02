@@ -38,8 +38,8 @@ test_2:
     S2CCLK_6: 150
     S2CCLK_7: 100
     S2CCLK_8: 100
-    fpga2_bitfile: null
-    fpga1_bitfile: C:\project\Jh8100\0047 JH8100_P1V0P8P3SEP9_SCP_EXPORT\bit\JH8100_P1V0P8P3SEP9_SCP_rtlcedd25e_fpga2c3fa3f_P1_UV19P_2209100705.bit
+    fpga1_bitfile: null
+    fpga2_bitfile: C:\project\Jh8100\0047 JH8100_P1V0P8P3SEP9_SCP_EXPORT\bit\JH8100_P1V0P8P3SEP9_SCP_rtlcedd25e_fpga2c3fa3f_P1_UV19P_2209100705.bit
   fw_regscan:
     project : <jh7100/jh7110/jh8100>
     config_id :
