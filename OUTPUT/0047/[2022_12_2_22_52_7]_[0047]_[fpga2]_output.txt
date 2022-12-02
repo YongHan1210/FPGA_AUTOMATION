@@ -1,0 +1,13 @@
+------------------------------
+ TESTING RUN 1
+------------------------------
+------------------------------
+ONPOWER
+------------------------------
+Set readip is ok.
+Command done.
+Version:Ver 20200808
+IP Addr:192:168:152:254
+NetMask:255:255:255:0
+Set J6 is ok.
+Command done.

@@ -204,15 +204,25 @@ class autofunc_onpow:
         rc=runcall(path1,path2)
         writetof.wf("ONPOWER",path1)
         writetof.wf("ONPOWER",path2)
-        
-        cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J6 --setpwr on"
-        print(f"\n[INFO] Turn on PowerModule {powermodule_ip}, S2C_POWER_BASE ...")
-        return_code=rc.subpcall(cmd,timeout=30)
-        if return_code!=0:
-            return return_code 
-        print("Warming up FPGA in [20 seconds]...")
-        countd.countdown(20)
-        return return_code
+        j6status=0
+        os.system('S2C_stm32_lwip.exe --ip ' + f'{powermodule_ip}' + ' --port 8080 --readEth > readEth.txt')
+        with open(r"readEth.txt","r") as f:
+            item=f.readlines()
+            if 'J6:on\n' in item:
+                j6status=1
+        if j6status==1:
+            print("S2C_POWER_BASE is already on.")
+            return 0
+        else:
+            print("S2C_POWER_BASE is off.")
+            cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J6 --setpwr on"
+            print(f"\n[INFO] Turn on PowerModule {powermodule_ip}, S2C_POWER_BASE ...")
+            return_code=rc.subpcall(cmd,timeout=30)
+            if return_code!=0:
+                return return_code 
+            print("Warming up FPGA in [20 seconds]...")
+            countd.countdown(20)
+            return return_code
     
     def daughthercard_onpower(powerJ11,powerJ9,powerJ8,powermodule_ip,path1=None,path2=None):  
         interface="  POWER ON DAUGHTHER CARD"
@@ -222,38 +232,85 @@ class autofunc_onpow:
         rc=runcall(path1,path2)
         writetof.wf("ONPOWER",path1)
         writetof.wf("ONPOWER",path2)
-        
+        j11status=0
+        j9status=0
+        j8status=0
+        run=0
+        with open(r"readEth.txt","r") as f:
+            item=f.readlines()
+            if 'J11:on\n' in item:
+                j11status=1
+            if 'J9:on\n' in item:
+                j9status=1
+            if 'J8:on\n' in item:
+                j8status=1
         if powerJ11:
-            cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J11 --setpwr on"
-            print(f"\n[INFO] Turn on PowerModule {powermodule_ip}, J11 1_8V ...")
+            if j11status==1:
+                print("J11 is already on..\n")
+                return_code=0
+            else:
+                cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J11 --setpwr on"
+                print(f"\n[INFO] Turn on PowerModule {powermodule_ip}, J11 1_8V ...")
+                return_code=rc.subpcall(cmd,timeout=30)
+                run+=1
         else:
-            cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J11 --setpwr off"
-            print(f"\n[INFO] Turn off PowerModule {powermodule_ip}, J11 1_8V ...")
-        return_code=rc.subpcall(cmd,timeout=30)
+            if j11status==1:
+                cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J11 --setpwr off"
+                print(f"\n[INFO] Turn off PowerModule {powermodule_ip}, J11 1_8V ...")
+                return_code=rc.subpcall(cmd,timeout=30)
+                run+=1
+            else:
+                print("J11 is already off..\n")
+                return_code=0
+            
         if return_code!=0:
             return return_code 
         
         if powerJ9:
-            cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J9 --setpwr on"
-            print(f"\n[INFO] Turn on PowerModule {powermodule_ip}, J9 3_3V ...")
+            if j9status==1:
+                print("J9 is already on..\n")
+                return_code=0
+            else:
+                cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J9 --setpwr on"
+                print(f"\n[INFO] Turn on PowerModule {powermodule_ip}, J9 3_3V ...")
+                return_code=rc.subpcall(cmd,timeout=30)
+                run+=1
         else:
-            cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J9 --setpwr off"
-            print(f"\n[INFO] Turn off PowerModule {powermodule_ip}, J8 3_3V ...")
-        return_code=rc.subpcall(cmd,timeout=30)
+            if j9status==1:
+                cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J9 --setpwr off"
+                print(f"\n[INFO] Turn off PowerModule {powermodule_ip}, J9 3_3V ...")
+                return_code=rc.subpcall(cmd,timeout=30)
+                run+=1
+            else:
+                print("J9 is already off..\n")
+                return_code=0
         if return_code!=0:
             return return_code 
         
         if powerJ8:
-            cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J8 --setpwr on"
-            print(f"\n[INFO] Turn on PowerModule {powermodule_ip}, J8 5_0V ...")
+            if j8status==1:
+                print("J8 is already on..\n")
+                return_code=0
+            else:
+                cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J8 --setpwr on"
+                print(f"\n[INFO] Turn on PowerModule {powermodule_ip}, J8 5_0V ...")
+                return_code=rc.subpcall(cmd,timeout=30)
+                run+=1
         else:
-            cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J8 --setpwr off"
-            print(f"\n[INFO] Turn off PowerModule {powermodule_ip}, J8 5_0V ...")
-        return_code=rc.subpcall(cmd,timeout=30)
+            if j8status==1:
+                cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J8 --setpwr off"
+                print(f"\n[INFO] Turn off PowerModule {powermodule_ip}, J8 5_0V ...")
+                return_code=rc.subpcall(cmd,timeout=30)
+                run+=1
+            else:
+                print("J8 is already off..\n")
+                return_code=0
         if return_code!=0:
             return return_code 
-        print("Warming up DAUGHTER CARD in [20 seconds]...")
-        countd.countdown(20)
+        if run!=0:
+            print("Warming up DAUGHTER CARD in [10 seconds]...")
+            countd.countdown(20)
+        print("COMPLETE!")
         return return_code
 
 

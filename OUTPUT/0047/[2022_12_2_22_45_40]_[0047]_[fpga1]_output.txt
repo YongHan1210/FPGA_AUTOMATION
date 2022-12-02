@@ -24,7 +24,7 @@ BOARD INFO
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <BoardInfo>
 	<board htype="XCVU19P_1FSVA3824E" firmware="VU19PD.002.001.e6042d7" connect="3">
-		<fpgastatus value="0001"/>
+		<fpgastatus value="0011"/>
 		<nic>
 			<ip value="192.168.152.253"/>
 			<mac value="0C-5C-B5-60-13-14"/>
@@ -64,25 +64,25 @@ DOWNLOAD MODULE
 		<Fpga file="" flag="off" idx="1"/>
 	</Module>
 	<Module boardType="DUAL160" idx="1">
-		<Fpga file="" flag="off" idx="1"/>
-		<Fpga file="C:\project\Jh8100\0047 JH8100_P1V0P8P3SEP9_SCP_EXPORT\bit\JH8100_P1V0P8P3SEP9_SCP_rtlcedd25e_fpga2c3fa3f_P1_UV19P_2209100705.bit" flag="on" idx="2"/>
+		<Fpga file="C:\project\Jh8100\0047 JH8100_P1V0P8P3SEP9_SCP_EXPORT\bit\JH8100_P1V0P8P3SEP9_SCP_rtlcedd25e_fpga2c3fa3f_P1_UV19P_2209100705.bit" flag="on" idx="1"/>
+		<Fpga file="" flag="off" idx="2"/>
 	</Module>
 </Download>
 mbus mode
 -------------[S2C FW] DOWNLOAD -------------
 copy right - S2C @Nov  4 2021 10:16:23.
-[INFO] start download f2......
-F2.........10 %
-F2.........20 %
-F2.........30 %
-F2.........40 %
-F2.........50 %
-F2.........60 %
-F2.........70 %
-F2.........80 %
-F2.........90 %
-F2.........100 %
-[INFO] f2 download successful.
+[INFO] start download f1......
+F1.........10 %
+F1.........20 %
+F1.........30 %
+F1.........40 %
+F1.........50 %
+F1.........60 %
+F1.........70 %
+F1.........80 %
+F1.........90 %
+F1.........100 %
+[INFO] f1 download successful.
 ------------------------------
 READ CLOCK
 ------------------------------
