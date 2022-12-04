@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <BoardInfo>
 	<board htype="XCVU19P_1FSVA3824E" firmware="VU19PD.002.001.e6042d7" connect="3">
-		<fpgastatus value="0011"/>
+		<fpgastatus value="0010"/>
 		<nic>
 			<ip value="192.168.152.253"/>
 			<mac value="0C-5C-B5-60-13-14"/>
