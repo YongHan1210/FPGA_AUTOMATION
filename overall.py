@@ -2,7 +2,6 @@ import subprocess,os,re,yaml,datetime,time,s2cyh,argparse
 from threading import Thread
 from s2cyh import S2cPlayerPro as S2cPlayerProyh
 
-
 class yamld:
 
     def __init__(self,modulename):
@@ -53,44 +52,8 @@ class yamld:
 
 
 
-class mkfolfildir:
-    
-    def __init__(self,bitfpga1,bitfpga2):
-        self.bitfpga1=bitfpga1
-        self.bitfpga2=bitfpga2
-            
-    def mainff(self):
-        if self.bitfpga1!=None:
-            fop1=self.mkfolderpath1(self.bitfpga1[18:22])
-            fpga1path=self.mkfilepath(fop1,self.bitfpga1[18:22],fpgan=r'fpga1')
-        else:fpga1path=''
-        
-        if self.bitfpga2!=None:
-            fop2=self.mkfolderpath1(self.bitfpga2[18:22])
-            fpga2path=self.mkfilepath(fop2,self.bitfpga2[18:22],fpgan=r'fpga2')
-        else:fpga2path=''
-        return fpga1path,fpga2path
-        
-    
-    def mkfolderpath1(self,dir):
-        def mkdira(path):
-            try:
-                os.mkdir(path)
-            except OSError as error:
-                return
-        path=r"{}\OUTPUT\{}".format(os.getcwd(),dir)
-        mkdira(path)
-        return path
-    
-    def mkfilepath(self,dir,bit,fpgan):
-        td=datetime.datetime.now()
-        path=r"{}\{}.txt".format(dir,r"[{}_{}_{}_{}_{}_{}]_[{}]_[{}]_output".format(td.year,td.month,td.day,td.hour,td.minute,td.second,bit,fpgan))
-        with open(path,"w")as f:
-            f.close()
-        return path
-
 class automationmain:
-    def __init__(self,modulename,listvar,fpga1outpath=None,fpga2outpath=None):
+    def __init__(self,modulename,listvar):
         self.modulename=modulename
         self.listvar=listvar
         self.J11power=self.listvar[0]
@@ -103,60 +66,50 @@ class automationmain:
         
         self.listclk=[self.listvar[3],self.listvar[4],self.listvar[5],self.listvar[6],self.listvar[7],self.listvar[8],self.listvar[9],self.listvar[10]]
         
-        self.path1=fpga1outpath
-        self.path2=fpga2outpath
-
-    
-
     def writeinterf(self,program_retry):
         interface="    TESTING RUN {} [{}]".format(program_retry,self.modulename)
         print("\t"*6,"-"*30)
         print("\t"*6,interface)
         print("\t"*6,"-"*30)
-        writetof.wf(" TESTING RUN {}".format(program_retry),self.path1)
-        writetof.wf(" TESTING RUN {}".format(program_retry),self.path2)
         
-    
     def loopfunction(self,program_retry):
         self.writeinterf(program_retry)
         
-        return_code=autofunc_onpow.fpga_onpower(self.powermodule_ip,self.path1,self.path2)
+        return_code=autofunc_onpow.fpga_onpower(self.powermodule_ip)
         if return_code!=0:
             return return_code  
           
-        return_code=autofunc_clk.clockgenmain(self.listclk,self.path1,self.path2)
+        return_code=autofunc_clk.clockgenmain(self.listclk)
         if return_code!=0:
             return return_code
 
-        return_code=autofunc_hardware.hardware(self.path1,self.path2)
+        return_code=autofunc_hardware.hardware()
         if return_code!=0:
             return return_code
          
-        return_code=autofunc_download.download(self.fpga1bitfile,self.fpga2bitfile,self.boardtype,self.path1,self.path2)
+        return_code=autofunc_download.download(self.fpga1bitfile,self.fpga2bitfile,self.boardtype)
         if return_code!=0:
             return return_code
         
-        return_code=autofunc_clkdet.readcheckclkmain(self.boardtype,self.listclk,self.path1,self.path2)
+        return_code=autofunc_clkdet.readcheckclkmain(self.boardtype,self.listclk)
         if return_code!=0:
             return return_code
         
-        return_code=autofunc_onpow.daughthercard_onpower(self.J11power,self.J9power,self.J8power,self.powermodule_ip,self.path1,self.path2)
+        return_code=autofunc_onpow.daughthercard_onpower(self.J11power,self.J9power,self.J8power,self.powermodule_ip)
         if return_code!=0:
             return return_code  
         
         return return_code
 
 
+
 class autofunc_offpow:
-    def offpower(powermodule_ip,path1=None,path2=None):
+    def offpower(powermodule_ip):
         interface="      POWER OFF FPGA & DCARD"
         print("\t"*4,"*"*60)
         print("\t"*6,interface)
         print("\t"*4,"*"*60)
-        rc=runcall(path1,path2)
-        writetof.wf("OFFPOWER",path1)
-        writetof.wf("OFFPOWER",path2)
-
+        rc=runcall()
 
         cmd=f"S2C_stm32_lwip.exe --ip {powermodule_ip} --port 8080 --pwr J11 --setpwr off"
         print(f"\n[INFO] Turn off PowerModule {powermodule_ip}, J11 1_8V ...")
@@ -189,23 +142,25 @@ class autofunc_offpow:
         
 
         return return_code
-    
+
+
 class countd():
     def countdown(t):
         while t:
             time.sleep(1)
             t-=1
 
+
+
 class autofunc_onpow:
     
-    def fpga_onpower(powermodule_ip,path1=None,path2=None):
+    def fpga_onpower(powermodule_ip):
         interface="    POWER ON FPGA"
         print("\t"*4,"*"*60)
         print("\t"*6,interface)
         print("\t"*4,"*"*60)
-        rc=runcall(path1,path2)
-        writetof.wf("ONPOWER",path1)
-        writetof.wf("ONPOWER",path2)
+        rc=runcall()
+
         j6status=0
         os.system('S2C_stm32_lwip.exe --ip ' + f'{powermodule_ip}' + ' --port 8080 --readEth > readEth.txt')
         with open(r"readEth.txt","r") as f:
@@ -226,14 +181,12 @@ class autofunc_onpow:
             countd.countdown(20)
             return return_code
     
-    def daughthercard_onpower(powerJ11,powerJ9,powerJ8,powermodule_ip,path1=None,path2=None):  
+    def daughthercard_onpower(powerJ11,powerJ9,powerJ8,powermodule_ip):  
         interface="  POWER ON DAUGHTHER CARD"
         print("\n","\t"*4,"*"*60)
         print("\t"*6,interface)
         print("\t"*4,"*"*60)
-        rc=runcall(path1,path2)
-        writetof.wf("ONPOWER",path1)
-        writetof.wf("ONPOWER",path2)
+        rc=runcall()
         j11status=0
         j9status=0
         j8status=0
@@ -319,23 +272,21 @@ class autofunc_onpow:
 
 class autofunc_clk:
 
-    def clockgenmain(listclk,path1=None,path2=None):
+    def clockgenmain(listclk):
         exefileclk=r"C:\S2C\PlayerPro_Runtime\firmware\bin\s2cclockgen_vuls.exe"
         s2chome=r"C:\Users\mdc_fpga_2\.s2chome\/"
         boardtype=r"DUAL_VU19P"
-        returncode=autofunc_clk.clockgen1(listclk,exefileclk,s2chome,boardtype,path1,path2)
+        returncode=autofunc_clk.clockgen1(listclk,exefileclk,s2chome,boardtype)
         if returncode!=0:
             return returncode
-        returncode=autofunc_clk.clockgen2(listclk,exefileclk,s2chome,boardtype,path1,path2)
+        returncode=autofunc_clk.clockgen2(listclk,exefileclk,s2chome,boardtype)
         if returncode!=0:
             return returncode
         return returncode
 
-        
-    def clockgen1(listclk,exefileclk,s2chome,boardtype,path1=None,path2=None):
-        writetof.wf("CLOCKGEN",path1)
-        writetof.wf("CLOCKGEN",path2)
-        rc=runcall(path1,path2)
+
+    def clockgen1(listclk,exefileclk,s2chome,boardtype):
+        rc=runcall()
         interface="      CLOCKGEN MODULE"
         print("\t"*4,"*"*60)
         print("\t"*6,interface)
@@ -344,21 +295,19 @@ class autofunc_clk:
         print("\nRUNNING CMD: {} \n".format(cmd))
         return rc.subpcall(cmd,timeout=30)
 
-    def clockgen2(listclk,exefileclk,s2chome,boardtype,path1=None,path2=None):
-        rc=runcall(path1,path2)
+    def clockgen2(listclk,exefileclk,s2chome,boardtype):
+        rc=runcall()
         cmd=r'{} -q --ind  --file {}  -r 113 -i 50 -a {} -b {} -c {} -d {} -t {}'.format(exefileclk,s2chome,str(listclk[3]),str(listclk[4]),str(listclk[5]),str(listclk[7]),boardtype)
         print("\nRUNNING CMD: {} \n".format(cmd))
         return rc.subpcall(cmd,timeout=30)
 
 class autofunc_hardware:
 
-    def hardware(path1=None,path2=None):
+    def hardware():
         exefilehardware=r"C:\S2C\PlayerPro_Runtime\bin\tools\S2C_HardWare.exe"
         s2chome=r"C:\Users\mdc_fpga_2\.s2chome\/"
         boardtype=r"DUAL_VU19P"
-        writetof.wf("HARDWARE",path1)
-        writetof.wf("HARDWARE",path2)
-        rc=runcall(path1,path2)
+        rc=runcall()
         interface="      HARDWARE MODULE"
         print("\t"*4,"*"*60)
         print("\t"*6,interface)
@@ -367,21 +316,10 @@ class autofunc_hardware:
         print("\nRUNNING CMD:{}".format(cmd))
         return rc.subpcall(cmd,timeout=30)
 
-class writetof:
-    def wf(interfacex,path=None):
-        if path!="" and path!=None:
-            with open (path, "a")as f:
-                f.write("-"*30)
-                f.write("\n")
-                f.write(interfacex)
-                f.write("\n")
-                f.write("-"*30)
-                f.write("\n")
-                f.close()
 
 class autofunc_download:
     
-    def download(f1_bit,f2_bit,boardtype,path1=None,path2=None):
+    def download(f1_bit,f2_bit,boardtype):
         interface="      DOWNLOAD MODULE"
         print("\t"*4,"*"*60)
         print("\t"*6,interface)
@@ -394,19 +332,13 @@ class autofunc_download:
         
         if f1_bit!=None:
             print("<<FPGA1 is TURN ON>>")
-            writetof.wf("BOARD INFO",path1)
-            ppro.read_hwinfo(path1)
-            writetof.wf("DOWNLOAD MODULE",path1)
-            ppro.download_bit(f1_bit, '',path1)
+            ppro.download_bit(f1_bit, '')
         else: 
             print("<<FPGA1 is TURN OFF>>")
             
         if f2_bit!=None:
             print("<<FPGA2 is TURN ON>>")
-            writetof.wf("BOARD INFO",path2)
-            ppro.read_hwinfo(path2)
-            writetof.wf("DOWNLOAD MODULE",path2)
-            ppro.download_bit('', f2_bit,path2)
+            ppro.download_bit('', f2_bit)
         else: 
             print("<<FPGA2 is TURN OFF>>")
         return 0
@@ -418,18 +350,16 @@ class autofunc_clkdet:
     def getpath():
         return os.getcwd()
 
-    def readcheckclkmain(boardtype,listclk=None,path1=None,path2=None):
-        autofunc_clkdet.readclock(boardtype,listclk,path1,path2)
+    def readcheckclkmain(boardtype,listclk=None):
+        autofunc_clkdet.readclock(boardtype,listclk)
         if listclk!=None:
-            clkdetret=autofunc_clkdet.clkchecking(listclk,path1,path2)
+            clkdetret=autofunc_clkdet.clkchecking(listclk)
             return clkdetret
         else:
             return 0
 
 
-    def readclock(boardtype,inputclk_list=None,path1=None,path2=None):
-        writetof.wf("READ CLOCK",path1)
-        writetof.wf("READ CLOCK",path2)
+    def readclock(boardtype,inputclk_list=None):
         desarr=[" << A1 >>"," << A2 >>"," << A3 >>","<< B1 >>","<< B2 >>","<< B3 >>","<< A4 >>","<< B4 >>"]
         interface="    READCLOCK MODULE"
         print("\n","\t"*4,"*"*60)
@@ -472,36 +402,14 @@ class autofunc_clkdet:
                     clkarr="<S2CCLKARR{} fre='{} MHz'>".format(i+1,m)
                     overall="{}  {}  {}".format(end,g,clkarr)
                     print("\t\t\t   {}".format(overall))
-                    if path1!='' and path1!=None:
-                        with open(path1,"a") as f:
-                            f.write(overall)
-                            f.write("\n")
-                            f.close()
-                    if path2!='' and path2!=None:
-                        with open(path2,"a") as f:
-                            f.write(overall)
-                            f.write("\n")
-                            f.close()
                 else:
                     overall="\t\t{}  {}  ".format(end,g)
                     print("\t\t\t   {}".format(overall))
-                    if path1!='' and path1!=None:
-                        with open(path1,"a") as f:
-                            f.write(overall)
-                            f.write("\n")
-                            f.close()
-                    if path2!='' and path2!=None:
-                        with open(path2,"a") as f:
-                            f.write(overall)
-                            f.write("\n")
-                            f.close()
                 i+=1
             print() 
      
     def clkchecking(listclk,path1=None,path2=None):
         pathx=f"{autofunc_clkdet.getpath()}/CLKTEMP.txt"
-        writetof.wf("CHECK CLOCK",path1)
-        writetof.wf("CHECK CLOCK",path2)
         interface="    CLOCKCHECKING MODULE"
         print("\n","\t"*4,"*"*60)
         print("\t"*6,interface)
@@ -549,32 +457,16 @@ class autofunc_clkdet:
                 break
         if(i==8):
             print("\t"*6,"    CLOCK CHECKED SUCCESS")
-            if path1!='' and path1!=None:
-                with open(path1,"a") as f:
-                    f.write("CLOCK CHECKED SUCCESS")
-                    f.close()
-            if path2!=''and path2!=None:
-                with open(path2,"a") as f:
-                    f.write("CLOCK CHECKED SUCCESS")
-                    f.close()
             return 0
         else:
             print("\t"*6,"ERROR:CLOCK CHECKED FAILED")
-            if path1!='' and path1!=None:
-                with open(path1,"a") as f:
-                    f.write("CLOCK CHECKED FAILED")
-                    f.close()
-            if path2!='' and path2!=None:
-                with open(path2,"a") as f:
-                    f.write("CLOCK CHECKED FAILED")
-                    f.close()
             return 1
 
 
+
+
 class runcall:
-    def __init__(self,path1=None,path2=None):
-        self.path1=path1
-        self.path2=path2
+
         
     def subpcall(self,cmd,timeout):
         p=self.call(cmd, timeout)
@@ -599,16 +491,6 @@ class runcall:
                 except:
                     line = line.strip().decode('utf-8')
                 if line!='':
-                    if self.path1!='' and self.path1!=None:
-                        with open(self.path1,"a") as f:
-                            f.write(f'{line}')
-                            f.write("\n")
-                            f.close()
-                    if self.path2!='' and self.path2!=None:
-                        with open(self.path2,"a") as f:
-                            f.write(f'{line}')
-                            f.write("\n")
-                            f.close()
                     print(f'{line}')
             if process.returncode!=0:
                 error=process.stderr
@@ -622,20 +504,9 @@ class runcall:
             if process.poll() is None:
                 process.kill()
                 print("TIMEOUT!!")
-                if self.path1!='':
-                    with open(self.path1,"a") as f:
-                        f.write("ERROR:TIMEOUT")
-                        f.write("\n")
-                        f.close()
-                if self.path2!='':
-                    with open(self.path2,"a") as f:
-                        f.write("ERROR:TIMEOUT")
-                        f.write("\n")
-                        f.close()
                 return TIMEOUT
             return SUCCESS if process.returncode==0 else FAILURE
         return process
-
 
 
 
@@ -650,16 +521,13 @@ if __name__ == '__main__':
     yamld=yamld(modulename)
     listvar=yamld.getlistvar()
    
-    mk=mkfolfildir(yamld.getfpga1_bitfile(),yamld.getfpga2_bitfile())
-    fpga1outpath,fpga2outpath=mk.mainff()
     powermoduleip=listvar[14]
     program_retry=1
-    auto=automationmain(modulename,listvar,fpga1outpath,fpga2outpath)
-    #auto=automationmain(powermoduleip,hostname,yamld.getpower_1_8V(),yamld.getpower_3_3V(),yamld.getpower_5_0V(),yamld.getS2CCLK_1(),yamld.getS2CCLK_2(),yamld.getS2CCLK_3(),yamld.getS2CCLK_4(),yamld.getS2CCLK_5(),yamld.getS2CCLK_6(),yamld.getS2CCLK_7(),yamld.getS2CCLK_8(),yamld.getfpga1_bitfile(),yamld.getfpga2_bitfile(),fpga1outpath,fpga2outpath)
+    auto=automationmain(modulename,listvar)
     while(program_retry<4):
         return_code=auto.loopfunction(program_retry)
         if return_code==0:
             break
         else:
-            autofunc_offpow.offpower(powermoduleip,fpga1outpath,fpga2outpath)
+            autofunc_offpow.offpower(powermoduleip)
             program_retry+=1

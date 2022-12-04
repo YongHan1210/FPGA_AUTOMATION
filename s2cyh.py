@@ -140,7 +140,7 @@ class S2cPlayerPro:
 		'''
 		output=os.path.join(self.s2chome, 'boardinfo_board1.xml')
 		boardtype = self.fpga.get_boardtype()
-		ret = Util.call(self.S2C_HardWare, ['-d', output, '-b', boardtype],path, timeout=10)
+		ret = Util.call(self.S2C_HardWare, ['-d', output, '-b', boardtype], timeout=10)
 		#t = RunnableTask(self.S2C_HardWare, ['-d', output, '-b', self.boardtype], timeout=10)
 		#ret = t.run()
 		if ret==0:
@@ -150,7 +150,7 @@ class S2cPlayerPro:
 		return ret
 
 	@Decorator.logit
-	def download_bit(self, f1, f2,path=None):
+	def download_bit(self, f1, f2):
 
 		def gen_download_xml(xml, f1, f2):
 			with open(xml, 'w') as f:
@@ -167,7 +167,7 @@ class S2cPlayerPro:
 					f.write(f'		<Fpga file="{f2}" flag="{f2_flag}" idx="2"/>\n')
 				f.write(f'	</Module>\n')
 				f.write(f'</Download>\n')
-			Util.cat(xml,path)
+			Util.cat(xml)
 		
 		if self.fpga is None:
 			print(f'Error: call select_target_hardware() first')
@@ -180,14 +180,14 @@ class S2cPlayerPro:
 		# download process
 		boardtype = self.fpga.get_boardtype()
 		#ret = RunnableTask(self.S2C_CPanel, ['--bus_mode  -b', self.boardtype], timeout=10).run()
-		ret = Util.call(self.S2C_CPanel, ['--bus_mode', '-b', boardtype],path, timeout=10)
+		ret = Util.call(self.S2C_CPanel, ['--bus_mode', '-b', boardtype], timeout=10)
 		if ret != 0:
 			return 1
 		#ret = RunnableTask(self.s2cdownload, ['-b', self.boardtype, '-f', download_xml], timeout=600).run()
 		s2cdownload = self.fpga.get_s2cdownload()
 		print("HERE")
 		print(s2cdownload)
-		ret = Util.call(s2cdownload, ['-b', boardtype, '-f', download_xml],path, timeout=600)
+		ret = Util.call(s2cdownload, ['-b', boardtype, '-f', download_xml], timeout=600)
 		if ret != 0:
 			return 1
 
