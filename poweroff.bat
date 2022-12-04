@@ -1,0 +1,1 @@
+python poweroff.py 192.168.152.254

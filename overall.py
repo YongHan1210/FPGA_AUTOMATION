@@ -139,8 +139,25 @@ class autofunc_offpow:
 
         print("Cooling down FPGA in 10 seconds...")
         countd.countdown(10)
-        
-
+        os.system('S2C_stm32_lwip.exe --ip ' + f'{powermodule_ip}' + ' --port 8080 --readEth > readEth.txt')
+        offstate=0
+        with open(r"readEth.txt","r") as f:
+            item=f.readlines()
+            if 'J6:off\n' not in item:
+                offstate+=1
+            if 'J8:off\n' not in item:
+                offstate+=1
+            if 'J9:off\n' not in item:
+                offstate+=1
+            if 'J11:off\n' not in item:
+                offstate+=1
+        if offstate!=0:
+            print("Error in TURNING OFF FPGA POWER")
+            return_code=1
+        else:
+            print("FPGA Successfully TURN OFF..")
+            return_code=0
+  
         return return_code
 
 
