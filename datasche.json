@@ -27,12 +27,12 @@
                             "S2CCLK_7":{"description": "S2CCLK_7 {A4 CLK} [minimum 10.000MHZ]","$ref": "#/definitions/CLK"},
                             "S2CCLK_8":{"description": "S2CCLK_8 {B4 CLK} [minimum 10.000MHZ]","$ref": "#/definitions/CLK"},
                             
-                            "fpga1_bitfile":{"type":["string","null"],"description": "Bitfile location for fpga1"},
-                            "fpga2_bitfile":{"type":["string","null"],"description": "Bitfile location for fpga1"},
+                            "bitfile_fpga1":{"type":["string","null"],"description": "Bitfile location for fpga1"},
+                            "bitfile_fpga2":{"type":["string","null"],"description": "Bitfile location for fpga1"},
                             
                             "project":{"type":"string"},
                             "cpu":{"type":"string"}
-                        },"required": ["hostname","power_1_8V","power_3_3V","power_5_0V","S2CCLK_1","S2CCLK_2","S2CCLK_3","S2CCLK_4","S2CCLK_5","S2CCLK_6","S2CCLK_7","S2CCLK_8","fpga1_bitfile","fpga2_bitfile"]
+                        },"required": ["hostname","power_1_8V","power_3_3V","power_5_0V","S2CCLK_1","S2CCLK_2","S2CCLK_3","S2CCLK_4","S2CCLK_5","S2CCLK_6","S2CCLK_7","S2CCLK_8","bitfile_fpga1","bitfile_fpga2"]
                     },
                 "fw_regscan":{"type":"object",
                                 "description": "FIRMWARE TEAM REGSCAN VARIABLE",
