@@ -9,7 +9,7 @@
 		<clock src="0">
 			<S2CCLK1 fre="20.000 MHz"/>
 			<S2CCLK2 fre="24.000 MHz"/>
-			<S2CCLK3 fre="40.000 MHz"/>
+			<S2CCLK3 fre="30.000 MHz"/>
 			<S2CCLK4 fre="200.002 MHz"/>
 			<S2CCLK5 fre="200.002 MHz"/>
 			<S2CCLK6 fre="150.001 MHz"/>
