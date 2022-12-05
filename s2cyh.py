@@ -150,7 +150,7 @@ class S2cPlayerPro:
 		return ret
 
 	@Decorator.logit
-	def download_bit(self, f1, f2):
+	def download_bit(self, f1, f2,path=None):
 
 		def gen_download_xml(xml, f1, f2):
 			with open(xml, 'w') as f:
@@ -187,7 +187,7 @@ class S2cPlayerPro:
 		s2cdownload = self.fpga.get_s2cdownload()
 		print("HERE")
 		print(s2cdownload)
-		ret = Util.call(s2cdownload, ['-b', boardtype, '-f', download_xml], timeout=600)
+		ret = Util.call(s2cdownload, ['-b', boardtype, '-f', download_xml], path, timeout=600)
 		if ret != 0:
 			return 1
 

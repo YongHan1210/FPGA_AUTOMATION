@@ -3,55 +3,27 @@ from threading import Thread
 from s2cyh import S2cPlayerPro as S2cPlayerProyh
 
 class yamld:
+    def __init__(self, fpga_data,module):
+            data = fpga_data[module]['fpga']
+            self.hostname=fpga_data[module]['hostname']
+            self.power_1_8V    = data['power_1_8V']
+            self.power_3_3V    = data['power_3_3V']
+            self.power_5_0V    = data['power_5_0V']
+            self.s2c_clk_1     = data['S2CCLK_1']
+            self.s2c_clk_2     = data['S2CCLK_2']
+            self.s2c_clk_3     = data['S2CCLK_3']
+            self.s2c_clk_4     = data['S2CCLK_4']
+            self.s2c_clk_5     = data['S2CCLK_5']
+            self.s2c_clk_6     = data['S2CCLK_6']
+            self.s2c_clk_7     = data['S2CCLK_7']
+            self.s2c_clk_8     = data['S2CCLK_8']
+            self.bitfile_fpga1 = data['fpga1_bitfile']
+            self.bitfile_fpga2 = data['fpga2_bitfile']
 
-    def __init__(self,modulename):
-        self.modulename=modulename
-        
-        self.hostname=self.getdata()[self.modulename]["fpga"]["hostname"]
-        self.powermodule_ip=self.def_powermodule_ip()
-        self.power_1_8V=self.getdata()[self.modulename]["fpga"]["power_1_8V"]
-        self.power_3_3V=self.getdata()[self.modulename]["fpga"]["power_3_3V"]
-        self.power_5_0V=self.getdata()[self.modulename]["fpga"]["power_5_0V"]
-        self.S2CCLK_1=self.getdata()[self.modulename]["fpga"]["S2CCLK_1"]
-        self.S2CCLK_2=self.getdata()[self.modulename]["fpga"]["S2CCLK_2"]
-        self.S2CCLK_3=self.getdata()[self.modulename]["fpga"]["S2CCLK_3"]
-        self.S2CCLK_4=self.getdata()[self.modulename]["fpga"]["S2CCLK_4"]
-        self.S2CCLK_5=self.getdata()[self.modulename]["fpga"]["S2CCLK_5"]
-        self.S2CCLK_6=self.getdata()[self.modulename]["fpga"]["S2CCLK_6"]
-        self.S2CCLK_7=self.getdata()[self.modulename]["fpga"]["S2CCLK_7"]
-        self.S2CCLK_8=self.getdata()[self.modulename]["fpga"]["S2CCLK_8"]
-        self.fpga1_bitfile=self.getdata()[self.modulename]["fpga"]["fpga1_bitfile"]
-        self.fpga2_bitfile=self.getdata()[self.modulename]["fpga"]["fpga2_bitfile"]
-        
-    def getdata(self):
-        with open("hello.yaml","r") as f:
-            data=yaml.safe_load(f)
-            return data
-    def def_powermodule_ip(self):
-        fpga=s2cyh.S2C_FPGAS[self.hostname]
+class getpowermoduleip():
+    def def_powermodule_ip(hostname):
+        fpga=s2cyh.S2C_FPGAS[hostname]
         return(fpga.get_pwrctrl_ip())
-    def getlistvar(self):
-        listvar=[self.getpower_1_8V(),self.getpower_3_3V(),self.getpower_5_0V(),self.getS2CCLK_1(),self.getS2CCLK_2(),self.getS2CCLK_3(),self.getS2CCLK_4(),self.getS2CCLK_5(),self.getS2CCLK_6(),self.getS2CCLK_7(),self.getS2CCLK_8(),self.getfpga1_bitfile(),self.getfpga2_bitfile(),self.gethostname(),self.getpowermodule_ip()]
-        return listvar
-    def getmodulename(self): return (self.modulename)
-    def gethostname(self): return (self.hostname)
-    def getpowermodule_ip(self): return (self.powermodule_ip)
-    def getpower_1_8V(self): return (self.power_1_8V)
-    def getpower_3_3V(self): return (self.power_3_3V)
-    def getpower_5_0V(self): return (self.power_5_0V)
-    def getS2CCLK_1(self): return (self.S2CCLK_1)
-    def getS2CCLK_2(self): return (self.S2CCLK_2)
-    def getS2CCLK_3(self): return (self.S2CCLK_3)
-    def getS2CCLK_4(self): return (self.S2CCLK_4)
-    def getS2CCLK_5(self): return (self.S2CCLK_5)
-    def getS2CCLK_6(self): return (self.S2CCLK_6)
-    def getS2CCLK_7(self): return (self.S2CCLK_7)
-    def getS2CCLK_8(self): return (self.S2CCLK_8)
-    def getfpga1_bitfile(self): return (self.fpga1_bitfile)
-    def getfpga2_bitfile(self): return (self.fpga2_bitfile)
-
-
-
 class automationmain:
     def __init__(self,modulename,listvar):
         self.modulename=modulename
@@ -345,20 +317,43 @@ class autofunc_download:
         workdir = os.getenv('USERPROFILE')
         ppro=S2cPlayerProyh(pprohome, workdir)
         ppro.select_target_hardware(boardtype)
-        
-        
+        return_code=1
+        path=f"DOWNLOADTEMP.txt"
         if f1_bit!=None:
+            f1_onstatus=1
             print("<<FPGA1 is TURN ON>>")
-            ppro.download_bit(f1_bit, '')
+            return_code=ppro.download_bit(f1_bit, '',path)
+            if return_code!=0:
+                return return_code
         else: 
             print("<<FPGA1 is TURN OFF>>")
             
         if f2_bit!=None:
+            f2_onstatus=1
             print("<<FPGA2 is TURN ON>>")
-            ppro.download_bit('', f2_bit)
+            return_code=ppro.download_bit('', f2_bit,path)
+            if return_code!=0:
+                return return_code
         else: 
             print("<<FPGA2 is TURN OFF>>")
-        return 0
+        
+        with open(path,"r")as f:
+            item=f.readlines()
+            if f1_onstatus==1:
+                if ("[INFO] f1 download successful.\n") in item:
+                    return_code=0
+                else:
+                    return_code=1
+            if f2_onstatus==1:
+                if ("[INFO] f2 download successful.\n") in item:
+                    return_code=0
+                else:
+                    return_code=1
+        return return_code
+        
+                    
+                
+    
 
 
 class autofunc_clkdet:
@@ -535,10 +530,17 @@ if __name__ == '__main__':
     args = parser.parse_args()
     modulename=args.modulename
 
-    yamld=yamld(modulename)
-    listvar=yamld.getlistvar()
+
+
+    with open("hello.yaml") as file:
+        data = yaml.load(file, yaml.SafeLoader)
+        fpga = yamld(data, modulename)
+        
+    powermoduleip=getpowermoduleip.def_powermodule_ip(fpga.hostname)
+    listvar=[fpga.power_1_8V, fpga.power_3_3V, fpga.power_5_0V,fpga.s2c_clk_1,fpga.s2c_clk_2,fpga.s2c_clk_3,fpga.s2c_clk_4,fpga.s2c_clk_5,fpga.s2c_clk_6,fpga.s2c_clk_7,fpga.s2c_clk_8,fpga.bitfile_fpga1,fpga.bitfile_fpga2,fpga.hostname,powermoduleip]
+        
    
-    powermoduleip=listvar[14]
+
     program_retry=1
     auto=automationmain(modulename,listvar)
     while(program_retry<4):

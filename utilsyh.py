@@ -31,7 +31,7 @@ class Util:
 
 
 
-	def call(exec, args, timeout=None):
+	def call(exec, args,path=None, timeout=None):
 		args.insert(0, exec)
 		process = subprocess.Popen(args=args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 		def run(process, args):
@@ -42,7 +42,9 @@ class Util:
 				except:
 					line = line.strip().decode('utf-8')
 				if line!='':
-
+					if path!=None:
+						with open(path,'w')as f:
+							f.write(line)
 					print(f'{line}')
 		daemon = False if timeout is None else True
 		t = Thread(target=run, args=(process, args), daemon=daemon)
@@ -52,7 +54,9 @@ class Util:
 			# kill the process if timeout
 			if process.poll() is None:
 				process.kill()
-
+				if path!=None:
+						with open(path,'w')as f:
+							f.write("ERROR:TIMEOUT!!")
 				return Util.TIMEOUT
 			return Util.SUCCESS if process.returncode==0 else Util.FAILURE
 		return process
