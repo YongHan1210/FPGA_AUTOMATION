@@ -43,8 +43,10 @@ class Util:
 					line = line.strip().decode('utf-8')
 				if line!='':
 					if path!=None:
-						with open(path,'w')as f:
+						with open(path,'a')as f:
 							f.write(line)
+							f.write('\n')
+							f.close()
 					print(f'{line}')
 		daemon = False if timeout is None else True
 		t = Thread(target=run, args=(process, args), daemon=daemon)

@@ -5,7 +5,7 @@ from s2cyh import S2cPlayerPro as S2cPlayerProyh
 class yamld:
     def __init__(self, fpga_data,module):
             data = fpga_data[module]['fpga']
-            self.hostname=fpga_data[module]['hostname']
+            self.hostname= data['hostname']
             self.power_1_8V    = data['power_1_8V']
             self.power_3_3V    = data['power_3_3V']
             self.power_5_0V    = data['power_5_0V']
@@ -318,7 +318,11 @@ class autofunc_download:
         ppro=S2cPlayerProyh(pprohome, workdir)
         ppro.select_target_hardware(boardtype)
         return_code=1
+        f1_onstatus=0
+        f2_onstatus=0
         path=f"DOWNLOADTEMP.txt"
+        with open(path,"w")as f:
+            f.close()
         if f1_bit!=None:
             f1_onstatus=1
             print("<<FPGA1 is TURN ON>>")
@@ -530,16 +534,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
     modulename=args.modulename
 
-
-
     with open("hello.yaml") as file:
         data = yaml.load(file, yaml.SafeLoader)
         fpga = yamld(data, modulename)
         
     powermoduleip=getpowermoduleip.def_powermodule_ip(fpga.hostname)
     listvar=[fpga.power_1_8V, fpga.power_3_3V, fpga.power_5_0V,fpga.s2c_clk_1,fpga.s2c_clk_2,fpga.s2c_clk_3,fpga.s2c_clk_4,fpga.s2c_clk_5,fpga.s2c_clk_6,fpga.s2c_clk_7,fpga.s2c_clk_8,fpga.bitfile_fpga1,fpga.bitfile_fpga2,fpga.hostname,powermoduleip]
-        
-   
 
     program_retry=1
     auto=automationmain(modulename,listvar)
