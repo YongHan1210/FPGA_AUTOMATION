@@ -17,8 +17,8 @@ class yamld:
             self.s2c_clk_6     = data['S2CCLK_6']
             self.s2c_clk_7     = data['S2CCLK_7']
             self.s2c_clk_8     = data['S2CCLK_8']
-            self.bitfile_fpga1 = data['fpga1_bitfile']
-            self.bitfile_fpga2 = data['fpga2_bitfile']
+            self.bitfile_fpga1 = data['bitfile_fpga1']
+            self.bitfile_fpga2 = data['bitfile_fpga2']
 
 class getpowermoduleip():
     def def_powermodule_ip(hostname):
