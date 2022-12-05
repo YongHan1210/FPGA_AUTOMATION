@@ -9,7 +9,7 @@ test_1:
     power_3_3V: ON
     power_5_0V: OFF
     S2CCLK_1: 20
-    S2CCLK_2: 24
+    S2CCLK_2: 20
     S2CCLK_3: 16
     S2CCLK_4: 200
     S2CCLK_5: 200
@@ -32,7 +32,7 @@ test_2:
     power_5_0V: OFF
     S2CCLK_1: 20
     S2CCLK_2: 24
-    S2CCLK_3: 16
+    S2CCLK_3: 30
     S2CCLK_4: 200
     S2CCLK_5: 200
     S2CCLK_6: 150
@@ -53,7 +53,7 @@ test_3:
     power_5_0V: ON
     S2CCLK_1: 20
     S2CCLK_2: 24
-    S2CCLK_3: 16
+    S2CCLK_3: 40
     S2CCLK_4: 200
     S2CCLK_5: 200
     S2CCLK_6: 150

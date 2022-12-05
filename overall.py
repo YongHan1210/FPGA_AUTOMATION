@@ -24,55 +24,6 @@ class getpowermoduleip():
     def def_powermodule_ip(hostname):
         fpga=s2cyh.S2C_FPGAS[hostname]
         return(fpga.get_pwrctrl_ip())
-class automationmain:
-    def __init__(self,modulename,listvar):
-        self.modulename=modulename
-        self.listvar=listvar
-        self.J11power=self.listvar[0]
-        self.J9power=self.listvar[1]
-        self.J8power=self.listvar[2]
-        self.fpga1bitfile=self.listvar[11]
-        self.fpga2bitfile=self.listvar[12]
-        self.boardtype=self.listvar[13]
-        self.powermodule_ip=self.listvar[14]
-        
-        self.listclk=[self.listvar[3],self.listvar[4],self.listvar[5],self.listvar[6],self.listvar[7],self.listvar[8],self.listvar[9],self.listvar[10]]
-        
-    def writeinterf(self,program_retry):
-        interface="    TESTING RUN {} [{}]".format(program_retry,self.modulename)
-        print("\t"*6,"-"*30)
-        print("\t"*6,interface)
-        print("\t"*6,"-"*30)
-        
-    def loopfunction(self,program_retry):
-        self.writeinterf(program_retry)
-        
-        return_code=autofunc_onpow.fpga_onpower(self.powermodule_ip)
-        if return_code!=0:
-            return return_code  
-          
-        return_code=autofunc_clk.clockgenmain(self.listclk)
-        if return_code!=0:
-            return return_code
-
-        return_code=autofunc_hardware.hardware()
-        if return_code!=0:
-            return return_code
-         
-        return_code=autofunc_download.download(self.fpga1bitfile,self.fpga2bitfile,self.boardtype)
-        if return_code!=0:
-            return return_code
-        
-        return_code=autofunc_clkdet.readcheckclkmain(self.boardtype,self.listclk)
-        if return_code!=0:
-            return return_code
-        
-        return_code=autofunc_onpow.daughthercard_onpower(self.J11power,self.J9power,self.J8power,self.powermodule_ip)
-        if return_code!=0:
-            return return_code  
-        
-        return return_code
-
 
 
 class autofunc_offpow:
@@ -144,7 +95,7 @@ class countd():
 class autofunc_onpow:
     
     def fpga_onpower(powermodule_ip):
-        interface="    POWER ON FPGA"
+        interface="      POWER ON FPGA"
         print("\t"*4,"*"*60)
         print("\t"*6,interface)
         print("\t"*4,"*"*60)
@@ -526,27 +477,60 @@ class runcall:
 
 
 
-
-if __name__ == '__main__':
-    
-    parser = argparse.ArgumentParser()
-    parser.add_argument("modulename", help="check for the module name in yaml file",type=str)
-    args = parser.parse_args()
-    modulename=args.modulename
-
-    with open("hello.yaml") as file:
-        data = yaml.load(file, yaml.SafeLoader)
-        fpga = yamld(data, modulename)
+# def writeinterf(program_retry,modulename):
+#         interface="    TESTING RUN {} [{}]".format(program_retry,modulename)
+#         print("\t"*6,"-"*30)
+#         print("\t"*6,interface)
+#         print("\t"*6,"-"*30)
         
-    powermoduleip=getpowermoduleip.def_powermodule_ip(fpga.hostname)
-    listvar=[fpga.power_1_8V, fpga.power_3_3V, fpga.power_5_0V,fpga.s2c_clk_1,fpga.s2c_clk_2,fpga.s2c_clk_3,fpga.s2c_clk_4,fpga.s2c_clk_5,fpga.s2c_clk_6,fpga.s2c_clk_7,fpga.s2c_clk_8,fpga.bitfile_fpga1,fpga.bitfile_fpga2,fpga.hostname,powermoduleip]
+# def loopfunction(program_retry,modulename,fpga,powermoduleip):
+#     listclk=[fpga.s2c_clk_1,fpga.s2c_clk_2,fpga.s2c_clk_3,fpga.s2c_clk_4,fpga.s2c_clk_5,fpga.s2c_clk_6,fpga.s2c_clk_7,fpga.s2c_clk_8]
+#     writeinterf(program_retry,modulename)
 
-    program_retry=1
-    auto=automationmain(modulename,listvar)
-    while(program_retry<4):
-        return_code=auto.loopfunction(program_retry)
-        if return_code==0:
-            break
-        else:
-            autofunc_offpow.offpower(powermoduleip)
-            program_retry+=1
+#     return_code=autofunc_onpow.fpga_onpower(powermoduleip)
+#     if return_code!=0:
+#         return return_code  
+        
+#     return_code=autofunc_clk.clockgenmain(listclk)
+#     if return_code!=0:
+#         return return_code
+
+#     return_code=autofunc_hardware.hardware()
+#     if return_code!=0:
+#         return return_code
+        
+#     return_code=autofunc_download.download(fpga.bitfile_fpga1,fpga.bitfile_fpga2,fpga.hostname)
+#     if return_code!=0:
+#         return return_code
+    
+#     return_code=autofunc_clkdet.readcheckclkmain(fpga.hostname,listclk)
+#     if return_code!=0:
+#         return return_code
+    
+#     return_code=autofunc_onpow.daughthercard_onpower(fpga.power_1_8V ,fpga.power_3_3V,fpga.power_5_0V,powermoduleip)
+#     if return_code!=0:
+#         return return_code  
+    
+#     return return_code
+
+# if __name__ == '__main__':
+    
+#     parser = argparse.ArgumentParser()
+#     parser.add_argument("modulename", help="check for the module name in yaml file",type=str)
+#     args = parser.parse_args()
+#     modulename=args.modulename
+
+#     with open("hello.yaml") as file:
+#         data = yaml.load(file, yaml.SafeLoader)
+#         fpga = yamld(data, modulename)
+        
+#     powermoduleip=getpowermoduleip.def_powermodule_ip(fpga.hostname)
+#     program_retry=1
+
+#     while(program_retry<4):
+#         return_code=loopfunction(program_retry,modulename,fpga,powermoduleip)
+#         if return_code==0:
+#             break
+#         else:
+#             autofunc_offpow.offpower(powermoduleip)
+#             program_retry+=1
