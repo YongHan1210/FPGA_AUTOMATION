@@ -1,4 +1,5 @@
 from overall import runcall
+import os
 class autofunc_hardware:
 
     def hardware():
@@ -16,4 +17,14 @@ class autofunc_hardware:
 if __name__ == '__main__':
     return_code=autofunc_hardware.hardware()
     print(return_code)
+    pprohome = os.getenv('RTHome')
+    workdir = os.getenv('S2C_WORKDIR')
+    s2c_ip = os.getenv('S2C_IP')
+    s2c_pwr_ctrl_ip = os.getenv('S2C_PWR_CTRL_IP')
+    hostname = os.getenv('S2C_HOSTNAME')
+    print(pprohome)
+    print(workdir)
+    print(s2c_ip)
+    print(s2c_pwr_ctrl_ip)
+    print(hostname)
     
