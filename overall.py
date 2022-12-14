@@ -513,24 +513,27 @@ class runcall:
     
 #     return return_code
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
     
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument("modulename", help="check for the module name in yaml file",type=str)
-#     args = parser.parse_args()
-#     modulename=args.modulename
+    parser = argparse.ArgumentParser()
+    parser.add_argument("modulename", help="check for the module name in yaml file",type=str)
+    args = parser.parse_args()
+    modulename=args.modulename
 
-#     with open("hello.yaml") as file:
-#         data = yaml.load(file, yaml.SafeLoader)
-#         fpga = yamld(data, modulename)
+
+    with open(r"C:\Users\YongHan.Lee\Desktop\testpath\hello.yaml") as file:
+        data = yaml.load(file, yaml.SafeLoader)
+        fpga = yamld(data, modulename)
+    
+    print(fpga.s2c_clk_1)
         
-#     powermoduleip=getpowermoduleip.def_powermodule_ip(fpga.hostname)
-#     program_retry=1
+    # powermoduleip=getpowermoduleip.def_powermodule_ip(fpga.hostname)
+    # program_retry=1
 
-#     while(program_retry<4):
-#         return_code=loopfunction(program_retry,modulename,fpga,powermoduleip)
-#         if return_code==0:
-#             break
-#         else:
-#             autofunc_offpow.offpower(powermoduleip)
-#             program_retry+=1
+    # while(program_retry<4):
+    #     return_code=loopfunction(program_retry,modulename,fpga,powermoduleip)
+    #     if return_code==0:
+    #         break
+    #     else:
+    #         autofunc_offpow.offpower(powermoduleip)
+    #         program_retry+=1

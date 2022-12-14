@@ -24,8 +24,8 @@ test_1:
     cpu : <dubhe/u74/e24>
 
 
-test_2:
-  fpga:
+test_2 :
+  fpga :
     hostname: Dual VU19P Prodigy Logic System
     power_1_8V: ON
     power_3_3V: OFF
@@ -65,3 +65,4 @@ test_3:
     project : <jh7100/jh7110/jh8100>
     config_id :
     cpu : <dubhe/u74/e24>
+

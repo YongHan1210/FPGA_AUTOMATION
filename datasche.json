@@ -2,14 +2,19 @@
     "$schema": "http://json-schema.org/schema",
     "type": "object",
     "title": "Automation Test Run",
-    "additionalProperties": true,
-
+    "additionalProperties": false,
+    
+    
+    
     "patternProperties": {
-        "^[A-Za-z0-9\\._%\\+-]+$":{
+        "^([a-zA-Z]+)_([0-9]+)$":{
             "type":"object",
             "description": "TEST RUN",
+            "additionalProperties": false,
+            
+            
             "patternProperties": {
-                "^[fpga\\._%\\+-]+$":{
+                "^[f][p][g][a]+$":{
                     "type":"object",
                     "description": "FPGA VARIABLE ",
                         "properties": {
