@@ -48,13 +48,13 @@ if __name__ == '__main__':
         data = yaml.load(file, yaml.SafeLoader)
         fpga = yamld(data, modulename)
     print(fpga.hostname)
-    # powermoduleip=getpowermoduleip.def_powermodule_ip(fpga.hostname)
-    # program_retry=1
+    powermoduleip=getpowermoduleip.def_powermodule_ip(fpga.hostname)
+    program_retry=1
 
-    # while(program_retry<4):
-    #     return_code=loopfunction(program_retry,modulename,fpga,powermoduleip)
-    #     if return_code==0:
-    #         break
-    #     else:
-    #         autofunc_offpow.offpower(powermoduleip)
-    #         program_retry+=1
+    while(program_retry<4):
+        return_code=loopfunction(program_retry,modulename,fpga,powermoduleip)
+        if return_code==0:
+            break
+        else:
+            autofunc_offpow.offpower(powermoduleip)
+            program_retry+=1

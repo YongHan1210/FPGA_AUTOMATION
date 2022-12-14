@@ -7,7 +7,7 @@
     
     
     "patternProperties": {
-        "^([a-zA-Z]+)_([0-9]+)$":{
+        "^([a-zA-Z0-9_]+)$":{
             "type":"object",
             "description": "TEST RUN",
             "additionalProperties": false,
@@ -18,7 +18,6 @@
                     "type":"object",
                     "description": "FPGA VARIABLE ",
                         "properties": {
-                            "hostname":{"description": "FPGA board name","type":"string"},
                             "power_1_8V":{"description": "Switch 8V of FPGA [ON / OFF]","$ref": "#/definitions/POWER"},
                             "power_3_3V":{"description": "Switch 3V of FPGA [ON / OFF]","$ref": "#/definitions/POWER"},
                             "power_5_0V":{"description": "Switch 0V of FPGA [ON / OFF]","$ref": "#/definitions/POWER"},
@@ -37,7 +36,7 @@
                             
                             "project":{"type":"string"},
                             "cpu":{"type":"string"}
-                        },"required": ["hostname","power_1_8V","power_3_3V","power_5_0V","S2CCLK_1","S2CCLK_2","S2CCLK_3","S2CCLK_4","S2CCLK_5","S2CCLK_6","S2CCLK_7","S2CCLK_8","bitfile_fpga1","bitfile_fpga2"]
+                        },"required": ["power_1_8V","power_3_3V","power_5_0V","S2CCLK_1","S2CCLK_2","S2CCLK_3","S2CCLK_4","S2CCLK_5","S2CCLK_6","S2CCLK_7","S2CCLK_8","bitfile_fpga1","bitfile_fpga2"]
                     },
                 "fw_regscan":{"type":"object",
                                 "description": "FIRMWARE TEAM REGSCAN VARIABLE",
