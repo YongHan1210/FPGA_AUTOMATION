@@ -5,7 +5,6 @@ from s2cyh import S2cPlayerPro as S2cPlayerProyh
 class yamld:
     def __init__(self, fpga_data,module):
             data = fpga_data[module]['fpga']
-            self.hostname= data['hostname']
             self.power_1_8V    = data['power_1_8V']
             self.power_3_3V    = data['power_3_3V']
             self.power_5_0V    = data['power_5_0V']
@@ -20,10 +19,6 @@ class yamld:
             self.bitfile_fpga1 = data['bitfile_fpga1']
             self.bitfile_fpga2 = data['bitfile_fpga2']
 
-class getpowermoduleip():
-    def def_powermodule_ip(hostname):
-        fpga=s2cyh.S2C_FPGAS[hostname]
-        return(fpga.get_pwrctrl_ip())
 
 
 class autofunc_offpow:
@@ -93,7 +88,7 @@ class countd():
 
 
 class autofunc_onpow:
-    
+
     def fpga_onpower(powermodule_ip):
         interface="      POWER ON FPGA"
         print("\t"*4,"*"*60)

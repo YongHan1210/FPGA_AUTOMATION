@@ -65,7 +65,7 @@ S2C_FPGAS = {
 	'VU19P-120-27' : S2cFpga('VU19P-120-27' , '', S2cFpga.LS_VU19P ),
 	'2VU19P-120-29': S2cFpga('2VU19P-120-29', '', S2cFpga.LS_2VU19P),
 	'2VU19P-120-30': S2cFpga('2VU19P-120-30', '', S2cFpga.LS_2VU19P),
-	'Dual VU19P Prodigy Logic System': S2cFpga('Dual VU19P Prodigy Logic System', '', S2cFpga.LS_2VU19P,connection='USB',ip='192.168.152.253',pwrctrl_ip='192.168.152.254'),
+	'MDC_FPGA_2': S2cFpga('MDC_FPGA_2', '', S2cFpga.LS_2VU19P,connection='USB',ip='192.168.152.253',pwrctrl_ip='192.168.152.254'),
 }
 
 class S2cPlayerPro:
@@ -79,8 +79,8 @@ class S2cPlayerPro:
 		self.S2C_CPanel   = 'S2C_CPanel'
 		self.s2cdownload  = None
 		self.fpga         = None
-		print(f'pproHome: {self.pprohome}')
-		print(f's2chome:  {self.s2chome}')
+		# print(f'pproHome: {self.pprohome}')
+		# print(f's2chome:  {self.s2chome}')
 
 	@Decorator.logit
 	def select_target_hardware(self, hostname):
@@ -187,7 +187,7 @@ class S2cPlayerPro:
 		s2cdownload = self.fpga.get_s2cdownload()
 		print("HERE")
 		print(s2cdownload)
-		ret = Util.call(s2cdownload, ['-b', boardtype, '-f', download_xml], path, timeout=600)
+		ret = Util.call(s2cdownload, ['-b', boardtype, '-f', download_xml], timeout=600 ,path=path)
 		if ret != 0:
 			return 1
 

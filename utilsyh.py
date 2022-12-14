@@ -14,7 +14,7 @@ class Util:
 	SUCCESS=0
 	FAILURE=1
 	TIMEOUT=2
-	pathx=r"C:\YHfilecompile"
+
 	def append_env(name, value):
 		env_sep = ';' if platform.system()=='Windows' else ':'
 		#print(f'old [{name}]:{os.environ[name]}')
@@ -31,8 +31,11 @@ class Util:
 
 
 
-	def call(exec, args,path=None, timeout=None):
-		args.insert(0, exec)
+	def call(exec, args=None,timeout=None,path=None):
+		if args!=None:
+			args.insert(0, exec)
+		else:
+			args=exec
 		process = subprocess.Popen(args=args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 		def run(process, args):
 			while process.poll() is None:
@@ -48,6 +51,9 @@ class Util:
 							f.write('\n')
 							f.close()
 					print(f'{line}')
+			if process.returncode!=0:
+				error=process.stderr
+				print("ERROR:: {}".format(error))
 		daemon = False if timeout is None else True
 		t = Thread(target=run, args=(process, args), daemon=daemon)
 		t.start()
@@ -59,6 +65,7 @@ class Util:
 				if path!=None:
 						with open(path,'w')as f:
 							f.write("ERROR:TIMEOUT!!")
+				print("TIMEOUT!!")
 				return Util.TIMEOUT
 			return Util.SUCCESS if process.returncode==0 else Util.FAILURE
 		return process
