@@ -73,7 +73,6 @@ class autofunc_offpow_fpga:
 class fpga_powerstatus:
     def check_powerstatus():
         s2c_pwr_ctrl_ip = os.getenv('S2C_PWR_CTRL_IP')
-        print(f"S2C_POWERMODULE_IP== {s2c_pwr_ctrl_ip}")
         j6status=0
         os.system('S2C_stm32_lwip.exe --ip ' + f'{s2c_pwr_ctrl_ip}' + ' --port 8080 --readEth > readEth.txt')
         with open(r"readEth.txt","r") as f:
@@ -90,7 +89,7 @@ class autofunc_onpow_fpga:
         print("\t"*6,interface)
         print("\t"*4,"*"*60)
         s2c_pwr_ctrl_ip = os.getenv('S2C_PWR_CTRL_IP')
-        print(f"S2C_POWERMODULE_IP== {s2c_pwr_ctrl_ip}")
+
  
         if fpga_powerstatus.check_powerstatus()==1:
             print("S2C_POWER_BASE is already on.")

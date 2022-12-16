@@ -3,25 +3,22 @@ from restructTesting import onpower_fpga_daughthercard,offpower_fpga_daughtherca
 from rT_function import yamld,autofunc_download,autofunc_clk
 
 def automation(modulename):
-    pprohome = os.getenv('RTHome')
-    workdir = os.getenv('S2C_WORKDIR')
-    s2c_ip = os.getenv('S2C_IP')
-    s2c_pwr_ctrl_ip = os.getenv('S2C_PWR_CTRL_IP')
-    hostname = os.getenv('S2C_HOSTNAME')
-    print(pprohome)
-    print(workdir)
-    print(s2c_ip)
-    print(s2c_pwr_ctrl_ip)
-    print(hostname)
 
-    with open("hello.yaml") as file:
-        data = yaml.load(file, yaml.SafeLoader)
-        fpga = yamld(data, modulename)
-    print(fpga.s2c_clk_3)
+    print(f"RTHome          : {os.getenv('RTHome')}")
+    print(f"S2C_WORKDIR     : {os.getenv('S2C_WORKDIR')}")
+    print(f"S2C_IP          : {os.getenv('S2C_IP')}")
+    print(f"S2C_PWR_CTRL_IP : {os.getenv('S2C_PWR_CTRL_IP')}")
+    print(f"S2C_HOSTNAME    : {os.getenv('S2C_HOSTNAME')}")
+
+    try:
+        with open("hello.yaml") as file:
+            data = yaml.load(file, yaml.SafeLoader)
+            fpga = yamld(data, args.m)
+    except:
+        print("Error:There is no such test_config modulename in yaml file!")
+        exit()
     
     program_retry=1
-
-    
     while(program_retry<4):
         writeinterf(program_retry,modulename)
         return_code=loopfunction(fpga)
@@ -34,46 +31,56 @@ def automation(modulename):
 
 def clkarg():
     if args.m!=None:
-            print("set clock")
-            print(args.m)
+
+        try:
             with open("hello.yaml") as file:
                 data = yaml.load(file, yaml.SafeLoader)
                 fpga = yamld(data, args.m)
-            listclk=[fpga.s2c_clk_1,fpga.s2c_clk_2,fpga.s2c_clk_3,fpga.s2c_clk_4,fpga.s2c_clk_5,fpga.s2c_clk_6,fpga.s2c_clk_7,fpga.s2c_clk_8]
-            print(listclk)
-            x=autofunc_clk()
-            x.clockgenmain(listclk)
+
+        except:
+            print("Error:There is no such test_config modulename in yaml file!")
+            exit()
+
+        listclk=[fpga.s2c_clk_1,fpga.s2c_clk_2,fpga.s2c_clk_3,fpga.s2c_clk_4,fpga.s2c_clk_5,fpga.s2c_clk_6,fpga.s2c_clk_7,fpga.s2c_clk_8]
+        x=autofunc_clk()
+        x.clockgenmain(listclk)
+
     else:
         print("Error: Please give a module name in yaml file")  
 
 def downlargv():
     if args.m!=None:
-            print("fpga1 download")
-            print(args.m)
+
+        try:
             with open("hello.yaml") as file:
                 data = yaml.load(file, yaml.SafeLoader)
                 fpga = yamld(data, args.m)
-            print(fpga.bitfile_fpga1)
-            print(fpga.bitfile_fpga2)
-            x=autofunc_download()
-            return_code=x.download(fpga.bitfile_fpga1,fpga.bitfile_fpga2)
-            if return_code!=0:
-                print("Error in download fpga")
+
+        except:
+            print("Error:There is no such test_config modulename in yaml file!")
+            exit()
+
+        x=autofunc_download()
+        x.download(fpga.bitfile_fpga1,fpga.bitfile_fpga2)
+
     else:
         print("Error: Please give a module name in yaml file")     
 
 def ondcargv():
+
     powerJ11=1 if args.j11_status else 0
     powerJ9=1 if args.j9_status else 0
     powerJ8=1 if args.j8_status else 0
     
     if ((powerJ11==False and powerJ9==False and powerJ8==False)):
         print("Error: You have not declared any port")
+
     else:
         print(powerJ11,powerJ9,powerJ8)
         onpower_fpga_daughthercard.daughthercard_onpower(powerJ11,powerJ9,powerJ8)
 
 if __name__ == '__main__':
+
     parser= argparse.ArgumentParser()
 
     group1=parser.add_argument_group("ON_OFF FPGA_POWER")
@@ -83,7 +90,7 @@ if __name__ == '__main__':
     group2=parser.add_argument_group("ON_OFF FPGA_DAUGHTER_CARD")
     group2.add_argument("-dc1","--on_daughtercard",help="turn on daughter card",action="store_true")
     group2.add_argument("-dc0","--off_daughtercard",help="turn off daughter card",action="store_true")
-    group2.add_argument("-5","--j8_status",help="turn on j11 daughter card", action="store_true")
+    group2.add_argument("-5_0","--j8_status",help="turn on j11 daughter card", action="store_true")
     group2.add_argument("-3_3","--j9_status",help="turn on j9 daughter card", action="store_true")
     group2.add_argument("-1_8","--j11_status",help="turn on j8 daughter card", action="store_true")
 
