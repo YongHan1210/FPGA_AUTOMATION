@@ -138,11 +138,6 @@ def loopfunction(fpga):
     if return_code!=0:
         return return_code
 
-    x=autofunc_clkdet()
-    return_code=x.readcheckclkmain(listclk)
-    if return_code!=0:
-        return return_code
-
     x=autofunc_download()
     return_code=x.download(fpga.bitfile_fpga1,fpga.bitfile_fpga2)
     if return_code!=0:

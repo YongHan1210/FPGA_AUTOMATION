@@ -266,26 +266,23 @@ class autofunc_download:
         return_code=1
         f1_onstatus=0
         f2_onstatus=0
+        print("<<FPGA1 is TURN ON>>") if f1_bit!=None else ("<<FPGA1 is TURN OFF>>")
+        print("<<FPGA2 is TURN ON>>") if f2_bit!=None else ("<<FPGA2 is TURN OFF>>")    
         path=f"DOWNLOADTEMP.txt"
         with open(path,"w")as f:
             f.close()
         if f1_bit!=None:
             f1_onstatus=1
-            print("<<FPGA1 is TURN ON>>")
             return_code=ppro.download_bit(f1_bit, '',path)
             if return_code!=0:
                 return return_code
-        else: 
-            print("<<FPGA1 is TURN OFF>>")
             
         if f2_bit!=None:
             f2_onstatus=1
-            print("<<FPGA2 is TURN ON>>")
             return_code=ppro.download_bit('', f2_bit,path)
             if return_code!=0:
                 return return_code
-        else: 
-            print("<<FPGA2 is TURN OFF>>")
+
         
         with open(path,"r")as f:
             item=f.readlines()

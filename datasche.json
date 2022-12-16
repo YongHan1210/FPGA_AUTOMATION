@@ -18,9 +18,9 @@
                     "type":"object",
                     "description": "FPGA VARIABLE ",
                         "properties": {
-                            "power_1_8V":{"description": "Switch 8V of FPGA [ON / OFF]","$ref": "#/definitions/POWER"},
-                            "power_3_3V":{"description": "Switch 3V of FPGA [ON / OFF]","$ref": "#/definitions/POWER"},
-                            "power_5_0V":{"description": "Switch 0V of FPGA [ON / OFF]","$ref": "#/definitions/POWER"},
+                            "power_1_8V":{"description": "Switch 1_8V of FPGA [ON / OFF]","$ref": "#/definitions/POWER"},
+                            "power_3_3V":{"description": "Switch 3_3V of FPGA [ON / OFF]","$ref": "#/definitions/POWER"},
+                            "power_5_0V":{"description": "Switch 5_0V of FPGA [ON / OFF]","$ref": "#/definitions/POWER"},
                             
                             "S2CCLK_1":{"description": "S2CCLK_1 {A1 CLK} [minimum 10.000MHZ]","$ref": "#/definitions/CLK"},
                             "S2CCLK_2":{"description": "S2CCLK_2 {A2 CLK} [minimum 10.000MHZ]","$ref": "#/definitions/CLK"},

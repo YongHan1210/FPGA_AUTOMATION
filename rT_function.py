@@ -151,6 +151,10 @@ class autofunc_clk(Parentvariable):
         returncode=self.hardware(hardwareexec_direc,s2chome,boardtype)
         if returncode!=0:
             return returncode
+        x=autofunc_clkdet()
+        return_code=x.readcheckclkmain(listclk)
+        if return_code!=0:
+            return return_code
 
         return returncode
 
@@ -297,24 +301,22 @@ class autofunc_download(Parentvariable):
         return_code=1
         f1_onstatus=0
         f2_onstatus=0
-        
+        print("<<FPGA1 is TURN ON>>") if f1_bit!=None else ("<<FPGA1 is TURN OFF>>")
+        print("<<FPGA2 is TURN ON>>") if f2_bit!=None else ("<<FPGA2 is TURN OFF>>")    
+        path=f"DOWNLOADTEMP.txt"
+        with open(path,"w")as f:
+            f.close()
         if f1_bit!=None:
             f1_onstatus=1
-            print("<<FPGA1 is TURN ON>>")
-            return_code=self.ppro.download_bit(f1_bit, '',self.downloadtemp_path)
+            return_code=self.ppro.download_bit(f1_bit, '',path)
             if return_code!=0:
                 return return_code
-        else: 
-            print("<<FPGA1 is TURN OFF>>")
             
         if f2_bit!=None:
             f2_onstatus=1
-            print("<<FPGA2 is TURN ON>>")
-            return_code=self.ppro.download_bit('', f2_bit,self.downloadtemp_path)
+            return_code=self.ppro.download_bit('', f2_bit,path)
             if return_code!=0:
                 return return_code
-        else: 
-            print("<<FPGA2 is TURN OFF>>")
         
         with open(self.downloadtemp_path,"r")as f:
             item=f.readlines()
