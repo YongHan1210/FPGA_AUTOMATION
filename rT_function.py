@@ -306,18 +306,16 @@ class autofunc_download(Parentvariable):
         path=f"DOWNLOADTEMP.txt"
         with open(path,"w")as f:
             f.close()
-        if f1_bit!=None:
+        if f1_bit!=None or f2_bit!=None:
             f1_onstatus=1
-            return_code=self.ppro.download_bit(f1_bit, '',path)
-            if return_code!=0:
-                return return_code
-            
-        if f2_bit!=None:
             f2_onstatus=1
-            return_code=self.ppro.download_bit('', f2_bit,path)
+            return_code=self.ppro.download_bit(f1_bit, f2_bit,path)
             if return_code!=0:
                 return return_code
-        
+        else:
+            print("No Download Bit file given!!")
+            return 1
+                
         with open(self.downloadtemp_path,"r")as f:
             item=f.readlines()
             if f1_onstatus==1:
