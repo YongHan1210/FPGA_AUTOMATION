@@ -70,15 +70,8 @@ class autofunc_offpow_fpga:
   
         return return_code
 
-
-class autofunc_onpow_fpga:
-    
-    def fpga_onpower():
-        interface="      POWER ON FPGA"
-        print("\t"*4,"*"*60)
-        print("\t"*6,interface)
-        print("\t"*4,"*"*60)
-
+class fpga_powerstatus:
+    def check_powerstatus():
         s2c_pwr_ctrl_ip = os.getenv('S2C_PWR_CTRL_IP')
         print(f"S2C_POWERMODULE_IP== {s2c_pwr_ctrl_ip}")
         j6status=0
@@ -87,7 +80,19 @@ class autofunc_onpow_fpga:
             item=f.readlines()
             if 'J6:on\n' in item:
                 j6status=1
-        if j6status==1:
+        return j6status
+
+class autofunc_onpow_fpga:
+    
+    def fpga_onpower():
+        interface="      POWER ON FPGA"
+        print("\t"*4,"*"*60)
+        print("\t"*6,interface)
+        print("\t"*4,"*"*60)
+        s2c_pwr_ctrl_ip = os.getenv('S2C_PWR_CTRL_IP')
+        print(f"S2C_POWERMODULE_IP== {s2c_pwr_ctrl_ip}")
+ 
+        if fpga_powerstatus.check_powerstatus()==1:
             print("S2C_POWER_BASE is already on.")
             return 0
         else:
@@ -132,6 +137,12 @@ class autofunc_clk(Parentvariable):
         Parentvariable.__init__(self)
 
     def clockgenmain(self,listclk):
+        if fpga_powerstatus.check_powerstatus()==1:
+            pass
+        else:
+            print("Error: Fpga J6 is Off>> Redirecting to TURN ON FPGA..")
+            time.sleep(2)
+            autofunc_onpow_fpga.fpga_onpower()
         clkexec_direc=os.path.join(self.pprohome_firmware_bin,'s2cclockgen_vuls.exe')
         s2chome=self.s2chome
         boardtype=self.boardtypeT
@@ -294,6 +305,12 @@ class autofunc_download(Parentvariable):
         Parentvariable.__init__(self)
 
     def download(self,f1_bit,f2_bit):
+        if fpga_powerstatus.check_powerstatus()==1:
+            pass
+        else:
+            print("Error: Fpga J6 is Off>> Redirecting to TURN ON FPGA..")
+            time.sleep(2)
+            autofunc_onpow_fpga.fpga_onpower()
         interface="      DOWNLOAD MODULE"
         print("\t"*4,"*"*60)
         print("\t"*6,interface)
