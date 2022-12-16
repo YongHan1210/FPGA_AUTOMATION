@@ -2,7 +2,7 @@ import os,yaml,argparse
 from rT_function import autofunc_onpow_fpga,autofunc_offpow_fpga,autofunc_clk,autofunc_clkdet,autofunc_download,yamld,runcall,countd
 
 class onpower_fpga_daughthercard(autofunc_onpow_fpga):
-    def daughthercard_onpower(powerJ11,powerJ9,powerJ8):  
+    def daughthercard_onpower(powerJ11=None,powerJ9=None,powerJ8=None):  
         interface="  POWER ON DAUGHTHER CARD"
         print("\n","\t"*4,"*"*60)
         print("\t"*6,interface)
