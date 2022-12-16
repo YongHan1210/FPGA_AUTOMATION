@@ -1,5 +1,5 @@
 import argparse
-from restructTesting import onpower_fpga_daughthercard
+from restructTesting import onpower_fpga_daughthercard,offpower_fpga_daughthercard
 
 if __name__ == '__main__':
     parser= argparse.ArgumentParser()
@@ -29,6 +29,8 @@ if __name__ == '__main__':
         
     if args.off_fpga:
         print("turn off fpga")
+        offpower_fpga_daughthercard.offpowerdc()
+        offpower_fpga_daughthercard.offpower()
     
     if args.on_daughtercard:
         print("turn on daughter card")
