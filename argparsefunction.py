@@ -75,21 +75,28 @@ def ondcargv():
 
 if __name__ == '__main__':
     parser= argparse.ArgumentParser()
-    parser.add_argument("-f1","--on_fpga",help="turn on fpga",action="store_true")
-    parser.add_argument("-f0","--off_fpga",help="turn off fpga",action="store_true")
+
+    group1=parser.add_argument_group("ON_OFF FPGA_POWER")
+    group1.add_argument("-f1","--on_fpga",help="turn on fpga",action="store_true")
+    group1.add_argument("-f0","--off_fpga",help="turn off fpga",action="store_true")
+
+    group2=parser.add_argument_group("ON_OFF FPGA_DAUGHTER_CARD")
+    group2.add_argument("-dc1","--on_daughtercard",help="turn on daughter card",action="store_true")
+    group2.add_argument("-dc0","--off_daughtercard",help="turn off daughter card",action="store_true")
+    group2.add_argument("-5","--j8_status",help="turn on j11 daughter card", action="store_true")
+    group2.add_argument("-3_3","--j9_status",help="turn on j9 daughter card", action="store_true")
+    group2.add_argument("-1_8","--j11_status",help="turn on j8 daughter card", action="store_true")
+
+    group3=parser.add_argument_group("DOWNLOAD_BITFILE_FPGA")
+    group3.add_argument("-d","--fpga_download",help="fpga1 download status",action="store_true")
+
+    group4=parser.add_argument_group("CLOCK_GENERATE_FPGA")
+    group4.add_argument("-c","--setclk",help="set clock in fpga", action="store_true")
+
+    group5=parser.add_argument_group("AUTOMATION_FPGA")
+    group5.add_argument("-a","--automation",help="automation main loop",action="store_true")
+    group5.add_argument("--m",help="modulename in yaml file")
     
-    parser.add_argument("-dc1","--on_daughtercard",help="turn on daughter card",action="store_true")
-    parser.add_argument("-dc0","--off_daughtercard",help="turn off daughter card",action="store_true")
-    parser.add_argument("-5","--j8_status",help="turn on j11 daughter card", action="store_true")
-    parser.add_argument("-3_3","--j9_status",help="turn on j9 daughter card", action="store_true")
-    parser.add_argument("-1_8","--j11_status",help="turn on j8 daughter card", action="store_true")
-    
-    parser.add_argument("-d","--fpga_download",help="fpga1 download status",action="store_true")
- 
-    parser.add_argument("-c","--setclk",help="set clock in fpga", action="store_true")
-    
-    parser.add_argument("-a","--automation",help="automation main loop",action="store_true")
-    parser.add_argument("--m",help="modulename in yaml file")
     args=parser.parse_args()
     
     
