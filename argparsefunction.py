@@ -22,15 +22,15 @@ def automation(modulename):
     program_retry=1
 
     
-    # while(program_retry<4):
-    #     writeinterf(program_retry,modulename)
-    #     return_code=loopfunction(fpga)
-    #     if return_code==0:
-    #         break
-    #     else:
-    #         offpower_fpga_daughthercard.offpowerdc()
-    #         offpower_fpga_daughthercard.offpower()
-    #         program_retry+=1
+    while(program_retry<4):
+        writeinterf(program_retry,modulename)
+        return_code=loopfunction(fpga)
+        if return_code==0:
+            break
+        else:
+            offpower_fpga_daughthercard.offpowerdc()
+            offpower_fpga_daughthercard.offpower()
+            program_retry+=1
 
 
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     parser.add_argument("-3_3","--j9_status",help="turn on j9 daughter card", action="store_true")
     parser.add_argument("-1_8","--j11_status",help="turn on j8 daughter card", action="store_true")
     
-    parser.add_argument("-df","--fpga_download",help="fpga1 download status",action="store_true")
+    parser.add_argument("-d","--fpga_download",help="fpga1 download status",action="store_true")
 
 
     
@@ -61,15 +61,48 @@ if __name__ == '__main__':
     
     if args.on_fpga:
         print("turn on fpga")
-        # return_code=onpower_fpga_daughthercard.fpga_onpower()
-        # if return_code!=0:
-        #     print("Error in onpower fpga")
+        return_code=onpower_fpga_daughthercard.fpga_onpower()
+        if return_code!=0:
+            print("Error in onpower fpga")
         
     if args.off_fpga:
         print("turn off fpga")
-        # offpower_fpga_daughthercard.offpowerdc()
-        # offpower_fpga_daughthercard.offpower()
-    
+        offpower_fpga_daughthercard.offpowerdc()
+        offpower_fpga_daughthercard.offpower()
+
+    if args.setclk:
+        if args.m!=None:
+            print("set clock")
+            print(args.m)
+            with open("hello.yaml") as file:
+                data = yaml.load(file, yaml.SafeLoader)
+                fpga = yamld(data, args.m)
+            listclk=[fpga.s2c_clk_1,fpga.s2c_clk_2,fpga.s2c_clk_3,fpga.s2c_clk_4,fpga.s2c_clk_5,fpga.s2c_clk_6,fpga.s2c_clk_7,fpga.s2c_clk_8]
+            print(listclk)
+            x=autofunc_clk()
+            return_code=x.clockgenmain(listclk)
+            if return_code!=0:
+                print("Error in clkset fpga")
+        else:
+            print("Error: Please give a module name in yaml file")  
+
+
+    if args.fpga_download:
+        if args.m!=None:
+            print("fpga1 download")
+            print(args.m)
+            with open("hello.yaml") as file:
+                data = yaml.load(file, yaml.SafeLoader)
+                fpga = yamld(data, args.m)
+            print(fpga.bitfile_fpga1)
+            print(fpga.bitfile_fpga2)
+            x=autofunc_download()
+            return_code=x.download(fpga.bitfile_fpga1,fpga.bitfile_fpga2)
+            if return_code!=0:
+                print("Error in download fpga")
+        else:
+            print("Error: Please give a module name in yaml file")     
+
     if args.on_daughtercard:
         print("turn on daughter card")
         powerJ11=1 if args.j11_status else 0
@@ -80,43 +113,16 @@ if __name__ == '__main__':
             print("Error: You have not declared any port")
         else:
             print(powerJ11,powerJ9,powerJ8)
-            # onpower_fpga_daughthercard.daughthercard_onpower(powerJ11,powerJ9,powerJ8)
+            #onpower_fpga_daughthercard.daughthercard_onpower(powerJ11,powerJ9,powerJ8)
             
     if args.off_daughtercard:
         print("turn off daughter card")
         # offpower_fpga_daughthercard.offpowerdc()
         
-    if args.fpga_download:
-        if args.m!=None:
-            print("fpga1 download")
-            print(args.m)
-            with open("hello.yaml") as file:
-                data = yaml.load(file, yaml.SafeLoader)
-                fpga = yamld(data, args.m)
-            print(fpga.bitfile_fpga1)
-            print(fpga.bitfile_fpga2)
-            # x=autofunc_download()
-            # return_code=x.download(fpga.bitfile_fpga1,fpga.bitfile_fpga2)
-            # if return_code!=0:
-            #     print("Error in download fpga")
-        else:
-            print("Error: Please give a module name in yaml file")        
+       
               
             
-    if args.setclk:
-        if args.m!=None:
-            print("set clock")
-            print(args.m)
-            with open("hello.yaml") as file:
-                data = yaml.load(file, yaml.SafeLoader)
-                fpga = yamld(data, args.m)
-            listclk=[fpga.s2c_clk_1,fpga.s2c_clk_2,fpga.s2c_clk_3,fpga.s2c_clk_4,fpga.s2c_clk_5,fpga.s2c_clk_6,fpga.s2c_clk_7,fpga.s2c_clk_8]
-            print(listclk)
-            # x=autofunc_clk()
-            # return_code=x.clockgenmain(listclk)
-            # if return_code!=0:
-        else:
-            print("Error: Please give a module name in yaml file")  
+
   
     
     if args.automation:

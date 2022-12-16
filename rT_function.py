@@ -301,8 +301,8 @@ class autofunc_download(Parentvariable):
         return_code=1
         f1_onstatus=0
         f2_onstatus=0
-        print("<<FPGA1 is TURN ON>>") if f1_bit!=None else ("<<FPGA1 is TURN OFF>>")
-        print("<<FPGA2 is TURN ON>>") if f2_bit!=None else ("<<FPGA2 is TURN OFF>>")    
+        print("<<FPGA1 is TURN ON>>") if f1_bit!=None else print("<<FPGA1 is TURN OFF>>")
+        print("<<FPGA2 is TURN ON>>") if f2_bit!=None else print("<<FPGA2 is TURN OFF>>")    
         path=f"DOWNLOADTEMP.txt"
         with open(path,"w")as f:
             f.close()
