@@ -129,23 +129,23 @@ def writeinterf(program_retry,modulename):
 def loopfunction(fpga):
     listclk=[fpga.s2c_clk_1,fpga.s2c_clk_2,fpga.s2c_clk_3,fpga.s2c_clk_4,fpga.s2c_clk_5,fpga.s2c_clk_6,fpga.s2c_clk_7,fpga.s2c_clk_8]
     
-    # return_code=onpower_fpga_daughthercard.fpga_onpower()
-    # if return_code!=0:
-    #     return return_code 
+    return_code=onpower_fpga_daughthercard.fpga_onpower()
+    if return_code!=0:
+        return return_code 
 
-    # x=autofunc_clk()
-    # return_code=x.clockgenmain(listclk)
-    # if return_code!=0:
-    #     return return_code
+    x=autofunc_clk()
+    return_code=x.clockgenmain(listclk)
+    if return_code!=0:
+        return return_code
 
     x=autofunc_download()
     return_code=x.download(fpga.bitfile_fpga1,fpga.bitfile_fpga2)
     if return_code!=0:
         return return_code
 
-    # return_code=onpower_fpga_daughthercard.daughthercard_onpower(fpga.power_1_8V ,fpga.power_3_3V,fpga.power_5_0V)
-    # if return_code!=0:
-    #     return return_code  
+    return_code=onpower_fpga_daughthercard.daughthercard_onpower(fpga.power_1_8V ,fpga.power_3_3V,fpga.power_5_0V)
+    if return_code!=0:
+        return return_code  
 
     # offpower_fpga_daughthercard.offpowerdc()
     # offpower_fpga_daughthercard.offpower()

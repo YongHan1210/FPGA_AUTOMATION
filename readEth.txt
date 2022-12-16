@@ -5,7 +5,7 @@ IP Addr:192:168:152:254
 NetMask:255:255:255:0
 Gateway:192:168:152:1
 Mac:0x0c:0x5c:0xb5:0x60:0x40:0xa5
-J6:off
+J6:on
 J11:off
 J9:off
 J8:off
