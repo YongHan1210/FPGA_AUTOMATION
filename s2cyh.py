@@ -167,7 +167,7 @@ class S2cPlayerPro:
 					f.write(f'		<Fpga file="{f2}" flag="{f2_flag}" idx="2"/>\n')
 				f.write(f'	</Module>\n')
 				f.write(f'</Download>\n')
-			Util.cat(xml)
+			Util.cat(xml,"download.txt")
 		
 		if self.fpga is None:
 			print(f'Error: call select_target_hardware() first')
