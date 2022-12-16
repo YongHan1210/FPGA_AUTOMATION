@@ -1,5 +1,5 @@
 import argparse
-from restructTesting import onpower_fpga_daughthercard
+from restructTesting import onpower_fpga_daughthercard,offpower_fpga_daughthercard
 
 if __name__ == '__main__':
     parser= argparse.ArgumentParser()
@@ -8,6 +8,9 @@ if __name__ == '__main__':
     
     parser.add_argument("-1_dc","--on_daughtercard",help="turn on daughter card",action="store_true")
     parser.add_argument("-0_dc","--off_daughtercard",help="turn off daughter card",action="store_true")
+    parser.add_argument("-j11","--setclk",help="set clock in fpga", action="store_true")
+    parser.add_argument("-j9","--setclk",help="set clock in fpga", action="store_true")
+    parser.add_argument("-j8","--setclk",help="set clock in fpga", action="store_true")
     
     parser.add_argument("-df1","--fpga1_download",help="fpga1 download status",action="store_true")
     parser.add_argument("-df2","--fpga2_download",help="fpga2 download status",action="store_true")
@@ -29,6 +32,8 @@ if __name__ == '__main__':
         
     if args.off_fpga:
         print("turn off fpga")
+        offpower_fpga_daughthercard.offpowerdc()
+        offpower_fpga_daughthercard.offpower()
     
     if args.on_daughtercard:
         print("turn on daughter card")
