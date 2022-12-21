@@ -161,25 +161,22 @@ if __name__ == '__main__':
     args = parser.parse_args()
     modulename=args.modulename
 
-    pprohome = os.getenv('RTHome')
-    workdir = os.getenv('S2C_WORKDIR')
-    s2c_ip = os.getenv('S2C_IP')
-    s2c_pwr_ctrl_ip = os.getenv('S2C_PWR_CTRL_IP')
-    hostname = os.getenv('S2C_HOSTNAME')
-    print(pprohome)
-    print(workdir)
-    print(s2c_ip)
-    print(s2c_pwr_ctrl_ip)
-    print(hostname)
+    
+    print(f"RTHome          : {os.getenv('RTHome')}")
+    print(f"S2C_WORKDIR     : {os.getenv('S2C_WORKDIR')}")
+    print(f"S2C_IP          : {os.getenv('S2C_IP')}")
+    print(f"S2C_PWR_CTRL_IP : {os.getenv('S2C_PWR_CTRL_IP')}")
+    print(f"S2C_HOSTNAME    : {os.getenv('S2C_HOSTNAME')}")
 
-    with open("hello.yaml") as file:
-        data = yaml.load(file, yaml.SafeLoader)
-        fpga = yamld(data, modulename)
-    print(fpga.s2c_clk_3)
+    try:
+        with open("hello.yaml") as file:
+            data = yaml.load(file, yaml.SafeLoader)
+            fpga = yamld(data, modulename)
+    except:
+        print("Error:There is no such test_config modulename in yaml file!")
+        exit()
     
     program_retry=1
-
-    
     while(program_retry<4):
         writeinterf(program_retry,modulename)
         return_code=loopfunction(fpga)
