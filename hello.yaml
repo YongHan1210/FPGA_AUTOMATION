@@ -25,7 +25,6 @@ test_1:
 
 test_2 :
   fpga :
-    hostname: Dual VU19P Prodigy Logic System
     power_1_8V: ON
     power_3_3V: OFF
     power_5_0V: OFF
@@ -46,7 +45,6 @@ test_2 :
 
 test_3:
   fpga:
-    hostname: Dual VU19P Prodigy Logic System
     power_1_8V: OFF
     power_3_3V: OFF
     power_5_0V: ON
