@@ -5,7 +5,6 @@ from s2cyh import S2cPlayerPro as S2cPlayerProyh
 class yamld:
     def __init__(self, fpga_data,module):
             data = fpga_data[module]['fpga']
-            self.hostname= data['hostname']
             self.power_1_8V    = data['power_1_8V']
             self.power_3_3V    = data['power_3_3V']
             self.power_5_0V    = data['power_5_0V']
@@ -20,10 +19,6 @@ class yamld:
             self.bitfile_fpga1 = data['bitfile_fpga1']
             self.bitfile_fpga2 = data['bitfile_fpga2']
 
-class getpowermoduleip():
-    def def_powermodule_ip(hostname):
-        fpga=s2cyh.S2C_FPGAS[hostname]
-        return(fpga.get_pwrctrl_ip())
 
 
 class autofunc_offpow:
@@ -93,7 +88,7 @@ class countd():
 
 
 class autofunc_onpow:
-    
+
     def fpga_onpower(powermodule_ip):
         interface="      POWER ON FPGA"
         print("\t"*4,"*"*60)
@@ -271,26 +266,23 @@ class autofunc_download:
         return_code=1
         f1_onstatus=0
         f2_onstatus=0
+        print("<<FPGA1 is TURN ON>>") if f1_bit!=None else ("<<FPGA1 is TURN OFF>>")
+        print("<<FPGA2 is TURN ON>>") if f2_bit!=None else ("<<FPGA2 is TURN OFF>>")    
         path=f"DOWNLOADTEMP.txt"
         with open(path,"w")as f:
             f.close()
         if f1_bit!=None:
             f1_onstatus=1
-            print("<<FPGA1 is TURN ON>>")
             return_code=ppro.download_bit(f1_bit, '',path)
             if return_code!=0:
                 return return_code
-        else: 
-            print("<<FPGA1 is TURN OFF>>")
             
         if f2_bit!=None:
             f2_onstatus=1
-            print("<<FPGA2 is TURN ON>>")
             return_code=ppro.download_bit('', f2_bit,path)
             if return_code!=0:
                 return return_code
-        else: 
-            print("<<FPGA2 is TURN OFF>>")
+
         
         with open(path,"r")as f:
             item=f.readlines()
@@ -513,24 +505,27 @@ class runcall:
     
 #     return return_code
 
-# if __name__ == '__main__':
+if __name__ == '__main__':
     
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument("modulename", help="check for the module name in yaml file",type=str)
-#     args = parser.parse_args()
-#     modulename=args.modulename
+    parser = argparse.ArgumentParser()
+    parser.add_argument("modulename", help="check for the module name in yaml file",type=str)
+    args = parser.parse_args()
+    modulename=args.modulename
 
-#     with open("hello.yaml") as file:
-#         data = yaml.load(file, yaml.SafeLoader)
-#         fpga = yamld(data, modulename)
+
+    with open(r"C:\Users\YongHan.Lee\Desktop\testpath\hello.yaml") as file:
+        data = yaml.load(file, yaml.SafeLoader)
+        fpga = yamld(data, modulename)
+    
+    print(fpga.s2c_clk_1)
         
-#     powermoduleip=getpowermoduleip.def_powermodule_ip(fpga.hostname)
-#     program_retry=1
+    # powermoduleip=getpowermoduleip.def_powermodule_ip(fpga.hostname)
+    # program_retry=1
 
-#     while(program_retry<4):
-#         return_code=loopfunction(program_retry,modulename,fpga,powermoduleip)
-#         if return_code==0:
-#             break
-#         else:
-#             autofunc_offpow.offpower(powermoduleip)
-#             program_retry+=1
+    # while(program_retry<4):
+    #     return_code=loopfunction(program_retry,modulename,fpga,powermoduleip)
+    #     if return_code==0:
+    #         break
+    #     else:
+    #         autofunc_offpow.offpower(powermoduleip)
+    #         program_retry+=1

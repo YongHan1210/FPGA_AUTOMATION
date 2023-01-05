@@ -12,27 +12,27 @@ def loopfunction(program_retry,modulename,fpga,powermoduleip):
     writeinterf(program_retry,modulename)
 
     return_code=autofunc_onpow.fpga_onpower(powermoduleip)
-    if return_code!=0:
+    if return_code:
         return return_code  
         
     return_code=autofunc_clk.clockgenmain(listclk)
-    if return_code!=0:
+    if return_code:
         return return_code
 
     return_code=autofunc_hardware.hardware()
-    if return_code!=0:
+    if return_code:
         return return_code
         
     return_code=autofunc_download.download(fpga.bitfile_fpga1,fpga.bitfile_fpga2,fpga.hostname)
-    if return_code!=0:
+    if return_code:
         return return_code
     
     return_code=autofunc_clkdet.readcheckclkmain(fpga.hostname,listclk)
-    if return_code!=0:
+    if return_code:
         return return_code
     
     return_code=autofunc_onpow.daughthercard_onpower(fpga.power_1_8V ,fpga.power_3_3V,fpga.power_5_0V,powermoduleip)
-    if return_code!=0:
+    if return_code:
         return return_code  
     
     return return_code
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     with open("hello.yaml") as file:
         data = yaml.load(file, yaml.SafeLoader)
         fpga = yamld(data, modulename)
-        
+    print(fpga.hostname)
     powermoduleip=getpowermoduleip.def_powermodule_ip(fpga.hostname)
     program_retry=1
 
